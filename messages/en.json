@@ -1,5 +1,172 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
+  "header": {
+    "logo": "CV Bot",
+    "nav": {
+      "howToStart": "How to Start?",
+      "pricing": "Pricing",
+      "services": "Services"
+    },
+    "login": "Log in",
+    "register": "Register Now"
+  },
+  "hero": {
+    "titleLine1": "Turn your CV into a conversation",
+    "titleLine2": "with hiring managers",
+    "description": "Stand out to hiring managers with an AI Chatbot trained on your CV. Get closer to your next job faster and more professionally.",
+    "cta": "Create AI Bot for your CV"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "From Resume to Recruiter-Ready AI in Minutes",
+    "description": "Our streamlined process makes it effortless to create your personalized career assistant.",
+    "step1": {
+      "title": "Upload your CV",
+      "description": "Simply drag and drop your existing resume or upload your CV to create a personalized AI assistant in minutes.",
+      "features": [
+        "200+ unique skills per CV",
+        "20+ industries per resume",
+        "2+ personalized questions"
+      ],
+      "uploadText": "Drag your resume here or click to upload"
+    },
+    "step2": {
+      "title": "Answer your personalized Questions",
+      "description": "This is a key step that helps our AI understand your CV better. We'll ask you a few questions to get to know you better.",
+      "features": [
+        "Quick & easy Q&A experience",
+        "Learn with suggestions & tips",
+        "Personalized content tailored to your personality"
+      ],
+      "questionText": "Answer 15+ More Questions",
+      "timeText": "Takes 10-15 mins"
+    },
+    "step3": {
+      "title": "CV AI Bot Creating",
+      "description": "Our advanced AI platform takes your resume, skills, and experience to create a conversational AI bot that truly understands you.",
+      "features": [
+        "Advanced CV Data extraction",
+        "Highly accurate matching 95%+",
+        "24/7 AI availability",
+        "Easily accessible and ready to use CV bot"
+      ]
+    },
+    "step4": {
+      "title": "Share with Recruiters",
+      "description": "Once your AI assistant is created, you can easily share it through a link or embed it in your portfolio website for recruiters to view.",
+      "features": [
+        "Share your AI CV bot link",
+        "Embedded in your portfolio website",
+        "Allow for user-defined access and permissions"
+      ],
+      "readyText": "Your CV Bot is Ready!",
+      "shareText": "View Chatbot CV link"
+    }
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Simple, Transparent Pricing",
+    "description": "Choose a plan that fits your career goals for today, tomorrow, and beyond.",
+    "monthly": {
+      "title": "Monthly",
+      "price": "$5",
+      "period": "/month",
+      "badge": "Best Value",
+      "features": [
+        "1 customized chatbot",
+        "Unlimited resume uploads",
+        "Priority customer support",
+        "Advanced analytics",
+        "Full customization"
+      ],
+      "cta": "Get Started"
+    },
+    "annually": {
+      "title": "Annually",
+      "price": "$5",
+      "period": "/month",
+      "features": [
+        "1 customized chatbot",
+        "Unlimited resume uploads",
+        "Customer support",
+        "Basic analytics",
+        "Basic customization"
+      ],
+      "cta": "Get Started"
+    }
+  },
+  "whyPlatform": {
+    "title": "Why Our Platform?",
+    "description": "Our innovative platform ensures you stand out in your job search with powerful features.",
+    "features": [
+      {
+        "title": "Recruiter-optimized AI",
+        "description": "AI chatbot designed specifically to catch recruiters' attention"
+      },
+      {
+        "title": "Improved matching rates",
+        "description": "Increase your chances of landing the right job"
+      },
+      {
+        "title": "Tailored answering for applications",
+        "description": "Smart answers tailored to each job application"
+      },
+      {
+        "title": "Personalized AI CV Bot",
+        "description": "AI bot that reflects your professional personality"
+      },
+      {
+        "title": "Save time and effort 24/7",
+        "description": "Your assistant works around the clock"
+      },
+      {
+        "title": "CV Performance Metrics",
+        "description": "Track and improve your CV performance"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to Land Your Dream Job?",
+    "description": "Create your AI CV chatbot today and impress recruiters with an interactive, personalized experience.",
+    "button": "Create My Chatbot"
+  },
+  "footer": {
+    "company": {
+      "title": "Company",
+      "links": {
+        "about": "About Us",
+        "careers": "Careers",
+        "blog": "Blog",
+        "contact": "Contact Us"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "links": {
+        "pricing": "Pricing",
+        "features": "Features",
+        "integrations": "Integrations"
+      }
+    },
+    "resources": {
+      "title": "Resources",
+      "links": {
+        "blog": "Blog",
+        "faq": "FAQ",
+        "support": "Support"
+      }
+    },
+    "legal": {
+      "title": "Legal",
+      "links": {
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+      }
+    },
+    "newsletter": {
+      "title": "Join Our Newsletter",
+      "placeholder": "Enter your email",
+      "button": "Subscribe"
+    },
+    "copyright": "© 2023 CVBot. All rights reserved."
   }
 }

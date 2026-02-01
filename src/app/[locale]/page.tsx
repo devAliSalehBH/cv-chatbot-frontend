@@ -1,13 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
-export default function Home() {
-  const t = useTranslations("HomePage");
 
+import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
+import Pricing from "@/components/Pricing";
+import WhyPlatform from "@/components/WhyPlatform";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
+
+export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <div>
-        <Button variant="outline">{t("title")}</Button>
-      </div>
-    </div>
+    <main className="min-h-screen">
+
+      <Hero />
+      <HowItWorks />
+      <Pricing />
+      <WhyPlatform />
+      <CallToAction />
+      <Footer />
+    </main>
   );
 }
