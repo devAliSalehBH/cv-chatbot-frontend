@@ -129,6 +129,118 @@
     "description": "Create your AI CV chatbot today and impress recruiters with an interactive, personalized experience.",
     "button": "Create My Chatbot"
   },
+  "auth": {
+    "login": {
+      "title": "Welcome Back!",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "placeholders": {
+        "email": "Enter your email here",
+        "password": "Enter your password"
+      },
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "passwordRequired": "Password is required"
+      }
+    },
+    "verifyOtp": {
+      "title": "Verify your email",
+      "description": "We've sent a 4-digit code to",
+      "resendCode": "Resend code in",
+      "resendNow": "Resend now",
+      "verifyButton": "Verify",
+      "wrongEmail": "Wrong email?",
+      "goBack": "Go back",
+      "errors": {
+        "codeRequired": "Please enter verification code",
+        "codeInvalid": "Invalid verification code"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forget your password?",
+      "description": "No worries. Enter the email address associated with your account, and we'll send you a verification code to reset your password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Alaa@cvbot.project.co",
+      "emailButton": "Email me",
+      "rememberPassword": "Remember password?",
+      "loginLink": "Login",
+      "successTitle": "Email has been sent successfully",
+      "successMessage": "Please check your email inbox for a password recovery link",
+      "resentIn": "Resent in",
+      "returnToLogin": "Return to login"
+    },
+    "resetPassword": {
+      "title": "Create a new password",
+      "description": "Your new password must be different from your previous one and contain at least 8 characters",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your new password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter your new password",
+      "resetButton": "Reset password",
+      "errors": {
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "invalidToken": "Invalid or expired token"
+      }
+    },
+    "signup": {
+      "title": "Create an account",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "password": "Password",
+      "termsPrefix": "By creating an account, you agree to our",
+      "termsLink": "Terms of Service",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
+      "createAccount": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Log in",
+      "placeholders": {
+        "firstName": "Enter your first name",
+        "lastName": "Enter your last name",
+        "email": "email@example.com",
+        "phone": "+1 (555) 000-0000",
+        "password": "Enter your password"
+      },
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Invalid phone number",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters"
+      },
+      "rightPanel": {
+        "headline": "Recruiters don't just read your CV.. they talk to it",
+        "subheadline": "An AI chatbot trained on your resume answers recruiter questions instantly, anytime",
+        "chatName": "Mohamed Abdullah",
+        "chatRole": "AI assistant",
+        "chatGreeting": "Hi! I'm an AI assistant trained on this professional's resume. Feel free to ask me anything!",
+        "chatUserQuestion": "What are your key skills?",
+        "chatBotResponse": "Based on the resume, I have strong expertise in React, TypeScript, Node.js, and modern web development. I specialize in building scalable applications with clean architecture."
+      }
+    },
+    "testimonials": [
+      {
+        "quote": "Recruiters don't just read your CV.. they talk to it",
+        "description": "An AI chatbot trained on your resume answers recruiter questions instantly, anytime"
+      },
+      {
+        "quote": "Setting up the chatbot was straightforward. It saved me time explaining my background during screening calls.",
+        "author": "Mohamed Abdullah",
+        "role": "Software Engineer"
+      }
+    ]
+  },
   "footer": {
     "company": {
       "title": "Company",
