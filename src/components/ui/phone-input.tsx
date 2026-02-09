@@ -18,7 +18,7 @@ const PhoneNumberInput = React.forwardRef<
   PhoneNumberInputProps
 >(({ className, value, onChange, onBlur, disabled, ...props }, ref) => {
   // Debounce onChange to improve performance
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
   const handleChange = React.useCallback(
     (phone: string) => {
       if (timeoutRef.current) {
@@ -81,6 +81,8 @@ const PhoneNumberInput = React.forwardRef<
           background: transparent !important;
           direction: ltr !important;
           text-align: left !important;
+          flex: 1 !important;
+          width: 100% !important;
         }
 
         .phone-country-button {

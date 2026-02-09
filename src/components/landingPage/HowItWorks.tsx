@@ -119,7 +119,9 @@ export default function HowItWorks() {
 
               {/* Vertical Animated Line */}
               <div
-                ref={(el) => (lineRefs.current[index] = el)}
+                ref={(el) => {
+                  lineRefs.current[index] = el;
+                }}
                 className={`hidden md:block absolute ${
                   locale === "ar" ? "left-[51%]" : "right-[51%]"
                 } top-0 w-1 -translate-x-1/2 h-full  `}

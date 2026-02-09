@@ -245,11 +245,11 @@
     },
     "testimonials": [
       {
-        "quote": "Recruiters don't just read your CV.. they talk to it",
-        "description": "An AI chatbot trained on your resume answers recruiter questions instantly, anytime"
+        "quote": "Recruiters don’t just read your CV..  they talk to it",
+        "description": "An AI chatbot trained on your resume answers recruiter questions \n instantly, anytime"
       },
       {
-        "quote": "Setting up the chatbot was straightforward. It saved me time explaining my background during screening calls.",
+        "quote": "\"Setting up the chatbot was straightforward. It saved me time explaining my background during screening calls.\"",
         "author": "Mohamed Abdullah",
         "role": "Software Engineer"
       }

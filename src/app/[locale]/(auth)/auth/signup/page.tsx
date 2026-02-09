@@ -23,13 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { PhoneNumberInput } from "@/components/ui/phone-input";
 import { getValidationPatterns } from "@/lib/validationRules";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface SignupFormData {
   firstName: string;
@@ -131,41 +124,12 @@ export default function SignupPage() {
     }
   };
 
-  const validateForm = (data: SignupFormData) => {
-    const errors: Partial<Record<keyof SignupFormData, string>> = {};
-
-    if (!data.firstName) errors.firstName = t("errors.firstNameRequired");
-    if (!data.lastName) errors.lastName = t("errors.lastNameRequired");
-    if (!data.email) {
-      errors.email = t("errors.emailRequired");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      errors.email = t("errors.emailInvalid");
-    }
-    if (!data.phone) {
-      errors.phone = t("errors.phoneRequired");
-    } else if (!/^\+?[\d\s-()]+$/.test(data.phone)) {
-      errors.phone = t("errors.phoneInvalid");
-    }
-    if (!data.password) {
-      errors.password = t("errors.passwordRequired");
-    } else if (data.password.length < 8) {
-      errors.password = t("errors.passwordMinLength");
-    }
-
-    return errors;
-  };
-
-  const builderPageImage =
-    locale === "ar"
-      ? "/images/auth/signup/builderPage-ar.svg"
-      : "/images/auth/signup/builderPage.svg";
-
   return (
-    <div className="w-full max-w-[440px] animate-fade-in-up">
+    <div className="w-full max-w-120 animate-fade-in-up">
       {/* Logo */}
       <div className="mb-8 flex justify-center lg:justify-start">
         <Image
-          src="/images/auth/logo.svg"
+          src={`/images/logo-${locale}.svg`}
           alt="CV Bot"
           width={120}
           height={40}
@@ -174,7 +138,7 @@ export default function SignupPage() {
       </div>
 
       {/* Title */}
-      <h1 className="text-[28px] font-semibold text-gray-900 mb-8 text-center lg:text-start">
+      <h1 className="text-[28px]  text-gray-900 mb-8 text-center">
         {t("title")}
       </h1>
 
@@ -315,18 +279,18 @@ export default function SignupPage() {
           />
 
           {/* Terms & Privacy */}
-          <p className="text-xs text-gray-600 text-center leading-relaxed pt-2">
+          <p className="text-sm text-[#64748B] text-center leading-relaxed pt-16">
             {t("termsPrefix")}{" "}
             <Link
               href={`/${locale}/terms`}
-              className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+              className="text-[#2E87FE] hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("termsLink")}
             </Link>{" "}
             {t("and")}{" "}
             <Link
               href={`/${locale}/privacy`}
-              className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+              className="text-[#2E87FE] hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("privacyLink")}
             </Link>
@@ -336,7 +300,7 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-12 bg-[#1e293b] hover:bg-[#0f172a] text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-6"
+            className="w-full h-12 bg-[#1e293b] hover:bg-[#0f172a] text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
@@ -349,11 +313,11 @@ export default function SignupPage() {
           </Button>
 
           {/* Login Link */}
-          <p className="text-sm text-center text-gray-600 pt-4">
+          <p className="text-sm text-center text-[#64748B] pt-4">
             {t("alreadyHaveAccount")}{" "}
             <Link
               href={`/${locale}/auth/login`}
-              className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
             >
               {t("login")}
             </Link>

@@ -45,33 +45,42 @@ export function AuthRightPanel() {
       : "/images/auth/signup/builderPage.svg";
 
   return (
-    <div className="hidden lg:flex lg:w-[60%] items-center justify-center p-12 relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-600 to-blue-500">
+    <div className="hidden lg:flex lg:w-[60%] items-center justify-center  relative overflow-hidden bg-[linear-gradient(136.37deg,#0A0A0A_0%,#1E3A8A_25.18%,#2B84FF_72.57%)]">
       {/* Grid Pattern Overlay */}
       <div
-        className="absolute inset-0 opacity-100"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
-          `,
-          backgroundSize: "24px 24px",
-        }}
+        className="
+    absolute inset-0
+    bg-[url('/images/auth/side-bg.png')]
+    bg-size-[100%_100%]
+    bg-no-repeat 
+    opacity-20
+   "
       />
-
-      <div className="max-w-[600px] w-full z-10 space-y-8">
+      <div
+        className="
+    absolute
+    top-0 right-0
+    w-[60%]
+    aspect-square
+    bg-[url('/images/auth/vector.svg')]
+    bg-no-repeat
+    bg-top-right
+  "
+      />
+      <div className=" w-full z-10  h-full flex flex-col justify-between">
         {/* Testimonial Content with Fade Transition - Text Only Changes */}
-        <div className="text-white space-y-4">
+        <div className="text-white max-w-[80%] space-y-4 px-10 pt-16">
           <h2
             key={`quote-${currentTestimonialIndex}`}
-            className="text-4xl font-bold leading-tight animate-fade-in-up"
+            className="text-[32px] font-bold leading-tight animate-fade-in-up"
           >
             {currentTestimonial.quote}
           </h2>
           {currentTestimonial.description && (
             <p
               key={`desc-${currentTestimonialIndex}`}
-              className="text-lg text-blue-100 leading-relaxed animate-fade-in-up"
-              style={{ animationDelay: "0.1s" }}
+              className="text-[22px] text-[#FCFCFC] whitespace-pre-wrap leading-relaxed animate-fade-in-up"
+              style={{ animationDelay: "0s" }}
             >
               {currentTestimonial.description}
             </p>
@@ -80,18 +89,19 @@ export function AuthRightPanel() {
             <div
               key={`author-${currentTestimonialIndex}`}
               className="flex items-center gap-3 pt-2 animate-fade-in-up"
-              style={{ animationDelay: "0.1s" }}
+              style={{ animationDelay: "0s" }}
             >
-              <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">
-                <span className="text-white font-semibold text-lg">
-                  {currentTestimonial.author.charAt(0)}
-                </span>
-              </div>
+              <Image
+                src="/images/auth/container.svg"
+                alt="user avatar"
+                width={56}
+                height={56}
+              />
               <div>
-                <p className="font-semibold text-white">
+                <p className="text-lg text-white">
                   {currentTestimonial.author}
                 </p>
-                <p className="text-sm text-blue-200">
+                <p className="text-sm text-[#C4C4C4]">
                   {currentTestimonial.role}
                 </p>
               </div>
@@ -100,8 +110,8 @@ export function AuthRightPanel() {
         </div>
 
         {/* Chat Mockup Image - Always Visible & Static */}
-        <div className="relative">
-          <div className="bg-white rounded-2xl shadow-2xl p-1">
+        <div className="relative flex justify-end p-5">
+          <div className=" w-[75%] max-w-200">
             <Image
               src={builderPageImage}
               alt="CV Bot Chat Interface"

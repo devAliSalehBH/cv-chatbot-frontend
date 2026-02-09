@@ -21,9 +21,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-cairo); /* Default fallback */
-  --font-cairo: var(--font-cairo);
-  --font-outfit: var(--font-outfit);
 }
 
 body {

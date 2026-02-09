@@ -94,11 +94,11 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="w-full max-w-[440px] animate-fade-in-up">
+    <div className="w-full max-w-120 animate-fade-in-up">
       {/* Logo */}
-      <div className="mb-8 flex justify-center">
+      <div className="mb-8 flex justify-center lg:justify-start">
         <Image
-          src="/images/auth/logo.svg"
+          src={`/images/logo-${locale}.svg`}
           alt="CV Bot"
           width={120}
           height={40}
@@ -107,12 +107,12 @@ export default function ResetPasswordPage() {
       </div>
 
       {/* Title */}
-      <h1 className="text-[28px] font-semibold text-gray-900 mb-3 text-center">
+      <h1 className="text-[32px] text-center text-[#111827] mb-8">
         {t("title")}
       </h1>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 mb-8 text-center">
+      <p className="text-[16px] text-[#64748B] mb-8 text-center">
         {t("description")}
       </p>
 
@@ -207,7 +207,7 @@ export default function ResetPasswordPage() {
             password !== confirmPassword ||
             password.length < 8
           }
-          className="w-full h-12 bg-[#1e293b] hover:bg-[#0f172a] text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="w-full mt-16 h-12 bg-[#1e293b] hover:bg-[#0f172a] text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">

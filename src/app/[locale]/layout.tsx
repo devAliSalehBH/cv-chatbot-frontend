@@ -22,6 +22,30 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "CV Bot - مساعد ذكي لسيرتك الذاتية",
   description: "أنشئ مساعد ذكي تفاعلي لسيرتك الذاتية وتميز أمام أصحاب العمل",
+  icons: {
+    icon: "/images/logo.svg",
+    apple: "/images/logo.svg",
+  },
+  openGraph: {
+    title: "CV Bot - مساعد ذكي لسيرتك الذاتية",
+    description: "أنشئ مساعد ذكي تفاعلي لسيرتك الذاتية وتميز أمام أصحاب العمل",
+    images: [
+      {
+        url: "/images/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "CV Bot Logo",
+      },
+    ],
+    type: "website",
+    siteName: "CV Bot",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CV Bot - مساعد ذكي لسيرتك الذاتية",
+    description: "أنشئ مساعد ذكي تفاعلي لسيرتك الذاتية وتميز أمام أصحاب العمل",
+    images: ["/images/logo.svg"],
+  },
 };
 
 export default async function RootLayout({

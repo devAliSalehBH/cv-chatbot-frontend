@@ -139,11 +139,11 @@ export default function VerifyOtpPage() {
   };
 
   return (
-    <div className="w-full max-w-[440px] animate-fade-in-up">
+    <div className="w-full max-w-120 animate-fade-in-up">
       {/* Logo */}
-      <div className="mb-8 flex justify-center">
+      <div className="mb-8 flex justify-center lg:justify-start">
         <Image
-          src="/images/auth/logo.svg"
+          src={`/images/logo-${locale}.svg`}
           alt="CV Bot"
           width={120}
           height={40}
@@ -152,20 +152,20 @@ export default function VerifyOtpPage() {
       </div>
 
       {/* Title */}
-      <h1 className="text-[28px] font-semibold text-gray-900 mb-3 text-center">
+      <h1 className="text-[32px] text-center text-[#111827] mb-8">
         {t("title")}
       </h1>
 
       {/* Description with email */}
-      <p className="text-sm text-gray-600 mb-8 text-center">
+      <p className="text-[16px] text-[#64748B] mb-8 text-center">
         {t("description")}{" "}
         <span className="font-medium text-gray-900">{email}</span>
       </p>
 
       {/* OTP Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* OTP Input using Shadcn Component */}
-        <div className="flex justify-center">
+        <div className="flex justify-center" dir="ltr">
           <InputOTP maxLength={4} value={otp} onChange={setOtp}>
             <InputOTPGroup>
               <InputOTPSlot index={0} />
@@ -182,7 +182,7 @@ export default function VerifyOtpPage() {
             <button
               type="button"
               onClick={handleResend}
-              className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+              className="text-sm text-[#2E87FE] hover:text-blue-700 transition-colors"
             >
               {t("resendNow")}
             </button>
@@ -214,7 +214,7 @@ export default function VerifyOtpPage() {
           {t("wrongEmail")}{" "}
           <Link
             href={`/${locale}/auth/signup`}
-            className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
           >
             {t("goBack")}
           </Link>
