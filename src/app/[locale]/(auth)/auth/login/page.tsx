@@ -6,6 +6,10 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { apiPost } from "@/lib/api";
+import { useAlertStore } from "@/store/useAlertStore";
+import { setAuthToken, setUserProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { getValidationPatterns } from "@/lib/validationRules";
 
 interface LoginFormData {
   email: string;
@@ -25,24 +30,81 @@ interface LoginFormData {
 export default function LoginPage() {
   const t = useTranslations("auth.login");
   const locale = useLocale();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showAlert } = useAlertStore();
+  const tValidation = useTranslations();
+  const validationPatterns = getValidationPatterns(tValidation);
 
   const form = useForm<LoginFormData>({
     defaultValues: {
       email: "",
       password: "",
     },
+    mode: "onBlur",
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
+
     try {
-      console.log("Login submitted:", data);
-      // TODO: Implement API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error("Login error:", error);
+      const response = await apiPost(
+        "/auth/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          locale: locale,
+        },
+      );
+      console.log(response);
+
+      // Show success alert
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Store token and user profile
+      if (response.data.data.token) {
+        setAuthToken(response.data.data.token);
+      }
+
+      if (response.data.data) {
+        setUserProfile(response.data.data);
+      }
+
+      // Redirect to dashboard after successful login
+      setTimeout(() => {
+        router.replace(`/${locale}/dashboard`);
+      }, 1500);
+    } catch (error: any) {
+      // Check if it's email not verified error (403)
+      if (
+        error.response?.data?.code === 403 &&
+        error.response?.data?.data?.reason === "email_not_verified"
+      ) {
+        // Store email for OTP verification
+        localStorage.setItem("pending_verification_email", data.email);
+
+        // Show info alert
+        const message =
+          t("auth.email_not_verified") || error.response?.data?.message;
+        if (message) {
+          showAlert(message, false);
+        }
+
+        // Navigate to OTP page
+        setTimeout(() => {
+          router.replace(`/${locale}/auth/verify-otp`);
+        }, 1000);
+        return;
+      }
+
+      // Handle other errors
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -73,6 +135,10 @@ export default function LoginPage() {
           <FormField
             control={form.control}
             name="email"
+            rules={{
+              required: validationPatterns.required,
+              pattern: validationPatterns.email,
+            }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700">
@@ -95,6 +161,10 @@ export default function LoginPage() {
           <FormField
             control={form.control}
             name="password"
+            rules={{
+              required: validationPatterns.required,
+              minLength: validationPatterns.minLength8,
+            }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700">

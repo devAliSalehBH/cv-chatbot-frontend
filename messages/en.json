@@ -1,4 +1,23 @@
 {
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "minChar8": "Must be at least 8 characters",
+    "minChar2": "Must be at least 2 characters",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to continue to CV Bot",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Log In",
+    "loggingIn": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
   "header": {
     "logo": "CV Bot",
     "nav": {
@@ -172,6 +191,7 @@
       "successTitle": "Email has been sent successfully",
       "successMessage": "Please check your email inbox for a password recovery link",
       "resentIn": "Resent in",
+      "resendButton": "Resend Email",
       "returnToLogin": "Return to login"
     },
     "resetPassword": {
@@ -242,43 +262,22 @@
     ]
   },
   "footer": {
-    "company": {
-      "title": "Company",
-      "links": {
-        "about": "About Us",
-        "careers": "Careers",
-        "blog": "Blog",
-        "contact": "Contact Us"
-      }
+    "description": "AI-powered CV chatbots to help you land your dream job.",
+    "contact": {
+      "title": "Contact Us",
+      "email": "Hello@cvbot.co",
+      "address": "King Fahd Road, Al Olaya District, Riyadh 12212, Saudi Arabia",
+      "phone": "+966 55 123 4567"
     },
-    "products": {
-      "title": "Products",
-      "links": {
-        "pricing": "Pricing",
-        "features": "Features",
-        "integrations": "Integrations"
-      }
-    },
-    "resources": {
-      "title": "Resources",
-      "links": {
-        "blog": "Blog",
-        "faq": "FAQ",
-        "support": "Support"
-      }
+    "links": {
+      "title": "CV Bot",
+      "pricing": "Pricing",
+      "howItWorks": "How It Works"
     },
     "legal": {
-      "title": "Legal",
-      "links": {
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Service"
-      }
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
     },
-    "newsletter": {
-      "title": "Join Our Newsletter",
-      "placeholder": "Enter your email",
-      "button": "Subscribe"
-    },
-    "copyright": "© 2023 CVBot. All rights reserved."
+    "copyright": "© 2026 All rights reserved."
   }
 }

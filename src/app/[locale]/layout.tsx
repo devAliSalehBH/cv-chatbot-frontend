@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import GlobalAlert from "@/components/GlobalAlert";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -38,6 +39,7 @@ export default async function RootLayout({
     <html lang={locale} dir={dir}>
       <body className={`${cairo.variable} font-cairo antialiased`}>
         <NextIntlClientProvider messages={messages}>
+          <GlobalAlert />
           {children}
         </NextIntlClientProvider>
       </body>

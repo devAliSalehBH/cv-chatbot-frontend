@@ -5,6 +5,9 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { apiPost } from "@/lib/api";
+import { useAlertStore } from "@/store/useAlertStore";
+import { setAuthToken, setUserProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
@@ -17,12 +20,29 @@ export default function VerifyOtpPage() {
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const { showAlert } = useAlertStore();
+
+  // Get email from URL params or localStorage
+  const urlEmail = searchParams.get("email");
+  const [email, setEmail] = useState(urlEmail || "");
 
   const [otp, setOtp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
+
+  // Load email from localStorage if not in URL
+  useEffect(() => {
+    if (!urlEmail) {
+      const storedEmail = localStorage.getItem("pending_verification_email");
+      if (storedEmail) {
+        setEmail(storedEmail);
+      } else {
+        // No email found, redirect to signup
+        router.replace(`/${locale}/auth/signup`);
+      }
+    }
+  }, [urlEmail, locale, router]);
 
   // Timer countdown
   useEffect(() => {
@@ -49,13 +69,42 @@ export default function VerifyOtpPage() {
 
     setIsSubmitting(true);
     try {
-      console.log("OTP submitted:", otp);
-      // TODO: Implement API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // Redirect to dashboard or next step
-      // router.push(`/${locale}/dashboard`);
-    } catch (error) {
-      console.error("OTP verification error:", error);
+      const response = await apiPost(
+        "/auth/verify-email",
+        {
+          email: email,
+          otp: otp,
+        },
+        {
+          locale: locale,
+        },
+      );
+
+      // Show success alert
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Store token and user profile
+      if (response.data.token) {
+        setAuthToken(response.data.token);
+      }
+
+      if (response.data.user) {
+        setUserProfile(response.data.user);
+      }
+
+      // Clear pending email
+      localStorage.removeItem("pending_verification_email");
+
+      // Redirect to dashboard
+      setTimeout(() => {
+        router.replace(`/${locale}/dashboard`);
+      }, 1000);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
+      setOtp(""); // Clear OTP on error
     } finally {
       setIsSubmitting(false);
     }
@@ -64,15 +113,28 @@ export default function VerifyOtpPage() {
   const handleResend = async () => {
     if (!canResend) return;
 
-    setCanResend(false);
-    setTimer(60);
-
     try {
-      console.log("Resending OTP to:", email);
-      // TODO: Implement API call to resend OTP
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    } catch (error) {
-      console.error("Resend error:", error);
+      const response = await apiPost(
+        "/auth/resend-otp",
+        {
+          email: email,
+        },
+        {
+          locale: locale,
+        },
+      );
+
+      // Show success alert
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Reset timer
+      setCanResend(false);
+      setTimer(60);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
     }
   };
 

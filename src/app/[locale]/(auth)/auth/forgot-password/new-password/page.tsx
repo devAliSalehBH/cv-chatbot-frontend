@@ -2,13 +2,19 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
+import {
+  getValidationPatterns,
+  getPasswordMatchValidator,
+} from "@/lib/validationRules";
+import { apiPost } from "@/lib/api";
+import { useAlertStore } from "@/store/useAlertStore";
 
 interface ResetPasswordForm {
   password: string;
@@ -17,21 +23,27 @@ interface ResetPasswordForm {
 
 export default function ResetPasswordPage() {
   const t = useTranslations("auth.resetPassword");
+  const tValidation = useTranslations();
   const locale = useLocale();
   const router = useRouter();
-  const params = useParams();
-  const token = params.token as string;
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
+  const { showAlert } = useAlertStore();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const validationPatterns = getValidationPatterns(tValidation);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<ResetPasswordForm>();
+  } = useForm<ResetPasswordForm>({
+    mode: "onBlur",
+  });
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -49,15 +61,33 @@ export default function ResetPasswordPage() {
 
     setIsSubmitting(true);
     try {
-      console.log("Reset password with token:", token);
-      console.log("New password:", data.password);
-      // TODO: Implement API call to reset password
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Call reset password API with custom token
+      const response = await apiPost(
+        "/auth/reset-password",
+        {
+          password: data.password,
+          password_confirmation: data.confirmPassword,
+        },
+        {
+          locale: locale,
+          token: token, // Use token from URL
+        },
+      );
 
-      // Redirect to login on success
-      router.push(`/${locale}/auth/login`);
-    } catch (error) {
-      console.error("Reset password error:", error);
+      // Show message from backend using success flag
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Redirect to login after 2 seconds if successful
+      if (response.data.success !== false) {
+        setTimeout(() => {
+          router.replace(`/${locale}/auth/login`);
+        }, 2000);
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -102,8 +132,11 @@ export default function ResetPasswordPage() {
               type={showPassword ? "text" : "password"}
               placeholder={t("passwordPlaceholder")}
               {...register("password", {
-                required: true,
-                minLength: 8,
+                required: validationPatterns.required.message,
+                minLength: {
+                  value: validationPatterns.minLength8.value,
+                  message: validationPatterns.minLength8.message,
+                },
               })}
               className="h-12 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500 pr-12"
             />
@@ -119,9 +152,9 @@ export default function ResetPasswordPage() {
               )}
             </button>
           </div>
-          {errors.password?.type === "minLength" && (
-            <p className="text-sm text-red-600">
-              {t("errors.passwordTooShort")}
+          {errors.password && (
+            <p className="text-xs text-red-600 mt-1">
+              {errors.password.message}
             </p>
           )}
         </div>
@@ -140,8 +173,8 @@ export default function ResetPasswordPage() {
               type={showConfirmPassword ? "text" : "password"}
               placeholder={t("confirmPasswordPlaceholder")}
               {...register("confirmPassword", {
-                required: true,
-                validate: (value) => value === password,
+                required: validationPatterns.required.message,
+                ...getPasswordMatchValidator(tValidation, password),
               })}
               className="h-12 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500 pr-12"
             />
@@ -157,9 +190,9 @@ export default function ResetPasswordPage() {
               )}
             </button>
           </div>
-          {errors.confirmPassword?.type === "validate" && (
-            <p className="text-sm text-red-600">
-              {t("errors.passwordMismatch")}
+          {errors.confirmPassword && (
+            <p className="text-xs text-red-600 mt-1">
+              {errors.confirmPassword.message}
             </p>
           )}
         </div>

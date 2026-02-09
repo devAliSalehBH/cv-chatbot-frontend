@@ -6,6 +6,10 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { defaultCountries } from "react-international-phone";
+import { apiPost } from "@/lib/api";
+import { useAlertStore } from "@/store/useAlertStore";
 import { SA } from "country-flag-icons/react/3x2";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +21,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneNumberInput } from "@/components/ui/phone-input";
+import { getValidationPatterns } from "@/lib/validationRules";
 import {
   Select,
   SelectContent,
@@ -36,9 +42,14 @@ interface SignupFormData {
 
 export default function SignupPage() {
   const t = useTranslations("auth.signup");
+  const tValidation = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showAlert } = useAlertStore();
+
+  const validationPatterns = getValidationPatterns(tValidation);
 
   const form = useForm<SignupFormData>({
     defaultValues: {
@@ -49,16 +60,72 @@ export default function SignupPage() {
       phone: "",
       password: "",
     },
+    mode: "onBlur",
   });
 
   const onSubmit = async (data: SignupFormData) => {
     setIsSubmitting(true);
     try {
-      console.log("Form submitted:", data);
-      // TODO: Implement API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error("Signup error:", error);
+      const phoneData = data.phone || "";
+
+      let phone_country = "SA";
+      let localPhone = phoneData.replace(/\D/g, "");
+
+      // Parse using react-international-phone metadata
+      if (phoneData.startsWith("+")) {
+        const digitsOnly = phoneData.replace(/\D/g, "");
+
+        // Find matching country from react-international-phone countries
+        for (const country of defaultCountries) {
+          const dialCode = country[2]; // dial code is at index 2
+          const iso2 = country[1]; // ISO code is at index 1
+
+          if (digitsOnly.startsWith(dialCode)) {
+            phone_country = iso2.toUpperCase();
+            localPhone = digitsOnly.substring(dialCode.length);
+
+            console.log("Phone Debug:", {
+              input: phoneData,
+              dialCode: dialCode,
+              country: phone_country,
+              nationalNumber: localPhone,
+            });
+            break;
+          }
+        }
+      }
+
+      const response = await apiPost(
+        "/auth/register",
+        {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          phone: localPhone,
+          phone_country: phone_country,
+          password: data.password,
+          password_confirmation: data.password,
+        },
+        {
+          locale: locale,
+        },
+      );
+
+      // Show success alert
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Store email for OTP verification
+      localStorage.setItem("pending_verification_email", data.email);
+
+      // Navigate to OTP page
+      setTimeout(() => {
+        router.replace(`/${locale}/auth/verify-otp`);
+      }, 1000);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -119,6 +186,10 @@ export default function SignupPage() {
             <FormField
               control={form.control}
               name="firstName"
+              rules={{
+                required: validationPatterns.required,
+                minLength: validationPatterns.minLength2,
+              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">
@@ -139,6 +210,10 @@ export default function SignupPage() {
             <FormField
               control={form.control}
               name="lastName"
+              rules={{
+                required: validationPatterns.required,
+                minLength: validationPatterns.minLength2,
+              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">
@@ -161,6 +236,10 @@ export default function SignupPage() {
           <FormField
             control={form.control}
             name="email"
+            rules={{
+              required: validationPatterns.required,
+              pattern: validationPatterns.email,
+            }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700">
@@ -189,37 +268,7 @@ export default function SignupPage() {
                   {t("phoneNumber")}
                 </FormLabel>
                 <FormControl>
-                  <div className="flex gap-2">
-                    <Select
-                      defaultValue="SA"
-                      onValueChange={(value) =>
-                        form.setValue("countryCode", value)
-                      }
-                    >
-                      <SelectTrigger className="w-[100px] h-11 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all rounded-lg">
-                        <SelectValue>
-                          <div className="flex items-center gap-2">
-                            <SA className="w-5 h-4" />
-                            <span className="text-sm">SA</span>
-                          </div>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SA">
-                          <div className="flex items-center gap-2">
-                            <SA className="w-5 h-4" />
-                            <span>SA</span>
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      {...field}
-                      type="tel"
-                      placeholder={t("placeholders.phone")}
-                      className="flex-1 h-11 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all rounded-lg dir-ltr"
-                    />
-                  </div>
+                  <PhoneNumberInput {...field} />
                 </FormControl>
                 <FormMessage className="text-xs animate-slide-down" />
               </FormItem>
@@ -230,6 +279,10 @@ export default function SignupPage() {
           <FormField
             control={form.control}
             name="password"
+            rules={{
+              required: validationPatterns.required,
+              minLength: validationPatterns.minLength8,
+            }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700">

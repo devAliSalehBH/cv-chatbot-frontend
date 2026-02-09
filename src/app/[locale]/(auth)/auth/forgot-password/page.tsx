@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -16,6 +16,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
+import { getValidationPatterns } from "@/lib/validationRules";
+import { apiPost } from "@/lib/api";
+import { useAlertStore } from "@/store/useAlertStore";
 
 interface ForgotPasswordForm {
   email: string;
@@ -23,49 +26,105 @@ interface ForgotPasswordForm {
 
 export default function ForgotPasswordPage() {
   const t = useTranslations("auth.forgotPassword");
+  const tValidation = useTranslations();
   const locale = useLocale();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [countdown, setCountdown] = useState(60);
+  const [canResend, setCanResend] = useState(false);
+  const { showAlert } = useAlertStore();
+
+  const validationPatterns = getValidationPatterns(tValidation);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<ForgotPasswordForm>();
+  } = useForm<ForgotPasswordForm>({
+    mode: "onBlur",
+  });
 
   const email = watch("email");
+
+  // Countdown timer
+  useEffect(() => {
+    if (showSuccessDialog && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [showSuccessDialog, countdown]);
+
+  const sendResetEmail = async (emailAddress: string) => {
+    try {
+      const response = await apiPost(
+        "/auth/forget-password",
+        {
+          email: emailAddress,
+        },
+        {
+          locale: locale,
+        },
+      );
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const onSubmit = async (data: ForgotPasswordForm) => {
     setIsSubmitting(true);
     try {
-      console.log("Forgot password for:", data.email);
-      // TODO: Implement API call to send reset email
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await sendResetEmail(data.email);
 
       // Show success dialog
       setShowSuccessDialog(true);
+      setCountdown(60);
+      setCanResend(false);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-      // Start countdown
-      let timeLeft = 60;
-      const timer = setInterval(() => {
-        timeLeft -= 1;
-        setCountdown(timeLeft);
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-        }
-      }, 1000);
-    } catch (error) {
-      console.error("Forgot password error:", error);
+  const handleResend = async () => {
+    if (!canResend || !email) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await sendResetEmail(email);
+
+      showAlert(response.data.message, response.data.success !== false);
+
+      // Reset countdown
+      setCountdown(60);
+      setCanResend(false);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        showAlert(errorMessage, false);
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleReturnToLogin = () => {
-    router.push(`/${locale}/auth/login`);
+    router.replace(`/${locale}/auth/login`);
   };
 
   return (
@@ -103,11 +162,17 @@ export default function ForgotPasswordPage() {
             type="email"
             placeholder={t("emailPlaceholder")}
             {...register("email", {
-              required: true,
-              pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              required: validationPatterns.required.message,
+              pattern: {
+                value: validationPatterns.email.value,
+                message: validationPatterns.email.message,
+              },
             })}
             className="h-12 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500"
           />
+          {errors.email && (
+            <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Submit Button */}
@@ -150,10 +215,28 @@ export default function ForgotPasswordPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 pt-4">
-            {/* Countdown */}
-            <p className="text-sm text-center text-gray-600">
-              {t("resentIn")} {countdown} sec
-            </p>
+            {/* Countdown or Resend Button */}
+            {canResend ? (
+              <Button
+                onClick={handleResend}
+                disabled={isSubmitting}
+                variant="outline"
+                className="w-full h-12 border-blue-600 text-blue-600 hover:bg-blue-50"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
+                    Resending...
+                  </span>
+                ) : (
+                  t("resendButton")
+                )}
+              </Button>
+            ) : (
+              <p className="text-sm text-center text-gray-600">
+                {t("resentIn")} {countdown} sec
+              </p>
+            )}
 
             {/* Return to Login Button */}
             <Button
