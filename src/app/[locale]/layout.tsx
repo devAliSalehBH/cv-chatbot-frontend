@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Cairo, Outfit } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -10,7 +10,13 @@ import GlobalAlert from "@/components/GlobalAlert";
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -35,9 +41,16 @@ export default async function RootLayout({
   const messages = await getMessages();
   const dir = locale === "ar" ? "rtl" : "ltr";
 
+  // Select font based on locale
+  const fontClass = locale === "ar" ? cairo.variable : outfit.variable;
+  const fontName = locale === "ar" ? "font-cairo" : "font-outfit";
+
   return (
-    <html lang={locale} dir={dir}>
-      <body className={`${cairo.variable} font-cairo antialiased`}>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
+      <body
+        className={`${fontClass} ${fontName} antialiased`}
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider messages={messages}>
           <GlobalAlert />
           {children}

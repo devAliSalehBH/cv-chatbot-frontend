@@ -318,14 +318,14 @@ export default function SignupPage() {
           <p className="text-xs text-gray-600 text-center leading-relaxed pt-2">
             {t("termsPrefix")}{" "}
             <Link
-              href="/terms"
+              href={`/${locale}/terms`}
               className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("termsLink")}
             </Link>{" "}
             {t("and")}{" "}
             <Link
-              href="/privacy"
+              href={`/${locale}/privacy`}
               className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("privacyLink")}

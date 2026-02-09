@@ -21,14 +21,24 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-cairo);
+  --font-sans: var(--font-cairo); /* Default fallback */
   --font-cairo: var(--font-cairo);
+  --font-outfit: var(--font-outfit);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  /* Remove fixed font-family here, let Tailwind classes handle it */
+}
+
+/* Define utility classes if Tailwind doesn't pick them up automatically from variable names */
+.font-cairo {
   font-family: var(--font-cairo), Cairo, Tajawal, Inter, system-ui, sans-serif;
+}
+
+.font-outfit {
+  font-family: var(--font-outfit), Outfit, Inter, system-ui, sans-serif;
 }
 
 /* Radial Gradient Background Classes */

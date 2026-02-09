@@ -1,9 +1,9 @@
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import Pricing from "@/components/Pricing";
-import WhyPlatform from "@/components/WhyPlatform";
-import CallToAction from "@/components/CallToAction";
-import Footer from "@/components/Footer";
+import Hero from "@/components/landingPage/Hero";
+import HowItWorks from "@/components/landingPage/HowItWorks";
+import Pricing from "@/components/landingPage/Pricing";
+import WhyPlatform from "@/components/landingPage/WhyPlatform";
+import CallToAction from "@/components/landingPage/CallToAction";
+import Footer from "@/components/landingPage/Footer";
 
 export default function Home() {
   return (
