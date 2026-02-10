@@ -65,3 +65,17 @@ export function getUserProfile(): any | null {
 export function isAuthenticated(): boolean {
     return !!getAuthToken();
 }
+
+/**
+ * Remove authentication token (alias for clearAuth)
+ */
+export function removeAuthToken() {
+    clearAuth();
+}
+
+/**
+ * Remove user profile (alias for clearAuth)
+ */
+export function removeUserProfile() {
+    clearAuth();
+}

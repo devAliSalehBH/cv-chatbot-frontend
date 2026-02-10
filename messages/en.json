@@ -255,6 +255,26 @@
       }
     ]
   },
+  "dashboard": {
+    "welcome": "Welcome, {name}",
+    "subtitle": "Manage and preview your AI CV",
+    "emptyState": {
+      "title": "CV not uploaded yet",
+      "description": "Upload your CV to begin creating your AI-powered CV Bot.",
+      "button": "Start building your CV Bot"
+    },
+    "userDropdown": {
+      "myAccount": "My Account",
+      "subscription": "Subscription & Billing",
+      "logout": "Logout"
+    },
+    "logoutModal": {
+      "title": "Log out?",
+      "description": "You’ll be signed out of your account, but your data will remain and accessible when you log back in.",
+      "confirm": "Log out",
+      "cancel": "Stay"
+    }
+  },
   "footer": {
     "description": "AI-powered CV chatbots to help you land your dream job.",
     "contact": {
