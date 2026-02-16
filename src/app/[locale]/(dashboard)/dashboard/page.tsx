@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { getUserProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
@@ -40,11 +41,13 @@ export default function DashboardPage() {
             </div>
 
             <div className="shrink-0">
-              <Button className="bg-[#0F172A] hover:bg-[#1E293B] px-6 h-10 rounded-[10px] shadow-sm">
-                <p className="text-[#FCFCFC] text-[16px]">
-                  {t("emptyState.button")}
-                </p>
-              </Button>
+              <Link href="/create-bot">
+                <Button className="bg-[#0F172A] hover:bg-[#1E293B] px-6 h-10 rounded-[10px] shadow-sm">
+                  <p className="text-[#FCFCFC] text-[16px]">
+                    {t("emptyState.button")}
+                  </p>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
