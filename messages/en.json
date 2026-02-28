@@ -80,31 +80,37 @@
     "subtitle": "Simple, Transparent Pricing",
     "description": "Choose a plan that fits your career goals. No hidden fees.",
     "monthly": {
-      "title": "Monthly",
+      "title": "Premium",
       "price": "$5",
-      "period": "/month",
-      "badge": "Best Value",
+      "period": "/Month",
+      "yearlyOriginalPrice": "$60/year",
+      "yearlyPrice": "$50/year",
+      "badge": "Most Popular",
       "features": [
-        "1 customized chatbot",
-        "Unlimited resume uploads",
-        "Priority customer support",
-        "Advanced analytics",
-        "Full customization"
+        "AI-powered chat assistant trained on your resume",
+        "Generate 1 chatbot per month",
+        "Email support",
+        "15 static + 15 AI-generated questions",
+        "15 static + 15 AI-generated questions",
+        "1 free update within 30 days"
       ],
       "cta": "Get Premium"
     },
     "annually": {
-      "title": "Annually",
+      "title": "Premium",
       "price": "$5",
-      "period": "/month",
+      "period": "/Month",
+      "yearlyOriginalPrice": "$60/year",
+      "yearlyPrice": "$50/year",
       "features": [
-        "1 customized chatbot",
-        "Unlimited resume uploads",
-        "Customer support",
-        "Basic analytics",
-        "Basic customization"
+        "AI-powered chat assistant trained on your resume",
+        "Generate 1 chatbot per month",
+        "Email support",
+        "15 static + 15 AI-generated questions",
+        "15 static + 15 AI-generated questions",
+        "1 free update within 30 days"
       ],
-      "cta": "Get Started"
+      "cta": "Get Premium"
     }
   },
   "whyPlatform": {
@@ -293,5 +299,48 @@
       "privacy": "Privacy Policy"
     },
     "copyright": "© 2026 All rights reserved."
+  },
+  "createBot": {
+    "stepper": {
+      "uploadInfo": "Upload Info",
+      "answerQuestions": "Answer Questions",
+      "cvAiBotCreating": "CV AI Bot Creating",
+      "preview": "Preview",
+      "shareCvBot": "Share CV Bot",
+      "step": "Step",
+      "question": "Question",
+      "of": "of"
+    },
+    "uploadResume": {
+      "title": "Upload your resume",
+      "mobileTitle": "Upload your File",
+      "subtitle": "Upload your existing resume to get started building your CV Bot",
+      "next": "Next"
+    },
+    "uploadCertificates": {
+      "title": "Upload your certificates (Optional)",
+      "subtitle": "Add any relevant certificates or courses to strengthen your professional profile."
+    },
+    "linkedinProfile": {
+      "title": "Add Your LinkedIn Profile",
+      "subtitle": "Enter your LinkedIn profile URL to enhance your CV Bot with professional details.",
+      "inputLabel": "LinkedIn Profile URL",
+      "inputPlaceholder": "Paste your LinkedIn profile URL"
+    },
+    "answerQuestions": {
+      "lastQuestionTitle": "Last Question! You're almost done! 🎉",
+      "textareaPlaceholder": "Enter your answer here"
+    },
+    "fileUpload": {
+      "uploadAnother": "Drop Another File",
+      "uploadAnotherMobile": "Upload",
+      "browse": "or click to browse",
+      "formats": "PDF, DOCX, TXT. max 10 MB"
+    },
+    "common": {
+      "back": "Back",
+      "skip": "Skip",
+      "next": "Next"
+    }
   }
 }

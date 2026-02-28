@@ -4,7 +4,6 @@ import { Stepper } from "@/components/create-bot/Stepper";
 import { useCreateBotStore } from "@/store/create-bot-store";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 
 export default function CreateBotLayout({
   children,
@@ -12,42 +11,48 @@ export default function CreateBotLayout({
   children: React.ReactNode;
 }) {
   const { currentStep } = useCreateBotStore();
-  const t = useTranslations("dashboard"); // Assuming translations are in dashboard namespace for now
 
-  // Map step to ID for stepper
   const getStepId = (step: string) => {
     switch (step) {
       case "upload-resume":
         return 1;
       case "upload-certificates":
-        return 1; // Still part of step 1 visual
+        return 1;
       case "linkedin-profile":
-        return 1; // Still part of step 1 visual
+        return 1;
+      case "answer-questions":
+        return 2;
       default:
         return 1;
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Top Navigation */}
-      <div className="border-b border-gray-100">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link
-            href="/dashboard"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-6 h-6 text-gray-500" />
-          </Link>
-          <div className="flex-1 max-w-3xl mx-auto">
-            <Stepper currentStep={getStepId(currentStep)} />
+    <div className="min-h-screen bg-[#F8F9FA]">
+      {/* Top Navigation Bar - Transparent, no border */}
+      <div className="pt-8 pb-4">
+        <div className="flex items-center justify-center max-w-5xl mx-auto px-6 relative">
+          
+          {/* X Button - Absolute or placed close to the start of the stepper */}
+          <div className="absolute start-6 md:start-12 lg:start-0 top-1 md:top-1/2 md:-translate-y-1/2">
+            <Link
+              href="/dashboard"
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100/50 hover:text-gray-700 transition-colors bg-transparent"
+            >
+              <X className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="w-10"></div> {/* Spacer for centering */}
+
+          {/* Stepper Container */}
+          <div className="w-full max-w-4xl ps-12 pe-4 sm:px-0 mt-3 md:mt-0">
+            <Stepper currentStepId={getStepId(currentStep)} currentStepString={currentStep} />
+          </div>
+          
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">{children}</main>
+      <main className="w-full">{children}</main>
     </div>
   );
 }

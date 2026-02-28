@@ -4,6 +4,7 @@ import { useCreateBotStore } from "@/store/create-bot-store";
 import { UploadResume } from "@/components/create-bot/steps/UploadResume";
 import { UploadCertificates } from "@/components/create-bot/steps/UploadCertificates";
 import { LinkedInProfile } from "@/components/create-bot/steps/LinkedInProfile";
+import { AnswerQuestions } from "@/components/create-bot/steps/AnswerQuestions";
 
 export default function CreateBotPage() {
   const { currentStep } = useCreateBotStore();
@@ -16,6 +17,8 @@ export default function CreateBotPage() {
         return <UploadCertificates />;
       case "linkedin-profile":
         return <LinkedInProfile />;
+      case "answer-questions":
+        return <AnswerQuestions />;
       default:
         return <UploadResume />;
     }

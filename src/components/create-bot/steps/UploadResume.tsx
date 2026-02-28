@@ -2,9 +2,10 @@
 
 import { useCreateBotStore } from "@/store/create-bot-store";
 import { FileUpload } from "@/components/create-bot/FileUpload";
-import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export const UploadResume = () => {
+  const t = useTranslations("createBot.uploadResume");
   const { setResume, setStep, resume } = useCreateBotStore();
 
   const handleDrop = (files: File[]) => {
@@ -20,40 +21,44 @@ export const UploadResume = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-10">
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
-        Upload Your Resume
-      </h2>
-      <p className="text-gray-500 mb-8 text-center max-w-md">
-        Let's start by uploading your resume. We'll analyze it to create your AI
-        chatbot.
-      </p>
+    <div className="flex flex-col min-h-[calc(100vh-73px)]">
+      {/* Centered Content */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        {/* Title */}
+        <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          {t("title")}
+        </h1>
+        <p className="text-sm text-gray-500 mb-10 text-center max-w-lg">
+          {t("subtitle")}
+        </p>
 
-      <div className="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <FileUpload onDrop={handleDrop} />
-        {resume && (
-          <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
-            <span className="text-sm font-medium text-green-700">
-              Selected: {resume.name}
-            </span>
-            <button
-              onClick={() => setResume(null)}
-              className="text-sm text-red-500 hover:text-red-700 font-medium"
-            >
-              Remove
-            </button>
-          </div>
-        )}
+        {/* Card */}
+        <div className="w-full max-w-xl bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200/60 p-6">
+          <FileUpload
+            onDrop={handleDrop}
+            files={resume ? [resume] : []}
+            onRemove={() => setResume(null)}
+            dropzoneLabel={
+              <>
+                <span className="hidden md:inline">{t("title")}</span>
+                <span className="md:hidden">{t("mobileTitle")}</span>
+              </>
+            }
+          />
+        </div>
       </div>
 
-      <div className="mt-8 flex justify-end w-full max-w-2xl">
-        <Button
+      {/* Bottom bar with Next button */}
+      <div className="flex justify-end items-center px-6 md:px-8 py-5 w-full max-w-7xl mx-auto">
+        <button
           onClick={handleNext}
           disabled={!resume}
-          className="bg-[#0F172A] text-white px-8 py-2 rounded-lg hover:bg-[#1E293B] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full md:w-auto px-7 py-3 md:py-2.5 rounded-xl text-[15px] md:text-sm font-semibold transition-all duration-200
+            disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+            enabled:bg-[#0F172A] enabled:text-white enabled:hover:bg-[#1E293B] enabled:shadow-sm"
         >
-          Next
-        </Button>
+          {t("next")}
+        </button>
       </div>
     </div>
   );
