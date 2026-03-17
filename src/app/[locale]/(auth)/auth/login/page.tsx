@@ -7,9 +7,9 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { apiPost } from "@/lib/api";
+import { apiPost, apiGet } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
-import { setAuthToken, setUserProfile } from "@/lib/auth";
+import { setAuthToken, setUserProfile, clearAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -64,13 +64,25 @@ export default function LoginPage() {
       // Show success alert
       showAlert(response.data.message, response.data.success !== false);
 
-      // Store token and user profile
+      // Store token
       if (response.data.data.token) {
         setAuthToken(response.data.data.token);
       }
 
-      if (response.data.data) {
-        setUserProfile(response.data.data);
+      // Fetch full user profile and store it
+      try {
+        const profileResponse = await apiGet("/users/profile", { locale });
+        if (profileResponse.data.data) {
+          setUserProfile(profileResponse.data.data);
+        } else {
+          throw new Error("No profile data returned");
+        }
+      } catch (profileError) {
+        console.error("Failed to fetch profile:", profileError);
+        // Clear token since we can't proceed without profile
+        clearAuth();
+        showAlert(t("errors.profile_fetch_error"), false);
+        return;
       }
 
       // Redirect to dashboard after successful login

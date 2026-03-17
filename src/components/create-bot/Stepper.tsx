@@ -13,14 +13,15 @@ interface StepperProps {
 
 export const Stepper = ({ currentStepId, currentStepString }: StepperProps) => {
   const t = useTranslations("createBot.stepper");
-  const { currentQuestionIndex } = useCreateBotStore();
+  const { currentQuestionIndex, questions } = useCreateBotStore();
 
   const steps = [
     { id: 1, label: t("uploadInfo"), widthClass: "w-[100px]" },
-    { id: 2, label: t("answerQuestions"), widthClass: "w-[300px]" },
-    { id: 3, label: t("cvAiBotCreating"), widthClass: "w-[180px]" },
-    { id: 4, label: t("preview"), widthClass: "w-[100px]" },
-    { id: 5, label: t("shareCvBot"), widthClass: "w-[100px]" },
+    { id: 2, label: t("staticQuestions"), widthClass: "w-[150px]" },
+    { id: 3, label: t("aiQuestions"), widthClass: "w-[150px]" },
+    { id: 4, label: t("cvAiBotCreating"), widthClass: "w-[180px]" },
+    { id: 5, label: t("preview"), widthClass: "w-[100px]" },
+    { id: 6, label: t("shareCvBot"), widthClass: "w-[100px]" },
   ];
 
   let subStep = 1;
@@ -33,12 +34,16 @@ export const Stepper = ({ currentStepId, currentStepString }: StepperProps) => {
     if (currentStepString === "upload-certificates") subStep = 2;
     if (currentStepString === "linkedin-profile") subStep = 3;
   } else if (currentStepId === 2) {
-    totalSubSteps = 15;
-    mobileLabel = t("answerQuestions");
+    totalSubSteps = questions.length || 1;
+    mobileLabel = t("staticQuestions");
+    subStep = currentQuestionIndex + 1;
+  } else if (currentStepId === 3) {
+    totalSubSteps = questions.length || 1;
+    mobileLabel = t("aiQuestions");
     subStep = currentQuestionIndex + 1;
   }
 
-  // Local progress for the current phase (e.g., 33%, 66%, 100% for Upload Info)
+  // Local progress for the current phase
   const mobileProgressPercentage = (subStep / totalSubSteps) * 100;
 
   return (
@@ -56,8 +61,7 @@ export const Stepper = ({ currentStepId, currentStepString }: StepperProps) => {
               {/* Label */}
               <span
                 className={cn(
-                  "text-[12px] font-medium mb-1 whitespace-nowrap px-1",
-                  isActive || isCompleted ? "text-gray-800" : "text-gray-400"
+                  "font-normal text-[16px] mb-1 whitespace-nowrap px-1 text-[#6F6F6F]"
                 )}
               >
                 {step.label}

@@ -164,7 +164,8 @@
       "errors": {
         "emailRequired": "Email is required",
         "emailInvalid": "Invalid email address",
-        "passwordRequired": "Password is required"
+        "passwordRequired": "Password is required",
+        "profile_fetch_error": "Failed to load your profile. Please try logging in again."
       }
     },
     "verifyOtp": {
@@ -261,9 +262,55 @@
       }
     ]
   },
+  "cvchat": {
+    "title": "CV Bot",
+    "placeholder": "Ask me anything...",
+    "loading": "Loading AI Assistant...",
+    "error": "Error",
+    "notFound": "Could not find profile.",
+    "retry": "Retry",
+    "greeting": "Hi! I'm an AI assistant trained on this professional's resume. Feel free to ask me anything!",
+    "strongMatch": "Strong match for required skills:",
+    "variousSkills": "Various professional skills.",
+    "experience": "{years} years of experience in the field",
+    "contactInfo": "Contact Info",
+    "noEmail": "No email provided",
+    "noPhone": "No phone provided",
+    "remote": "Remote / Global",
+    "downloadResume": "Download Resume",
+    "suggestion1": "What are {name}'s key skills?",
+    "suggestion2": "How many years of experience?",
+    "suggestion3": "Can I download the CV?"
+  },
   "dashboard": {
-    "welcome": "Welcome, {name}",
-    "subtitle": "Manage and preview your AI CV",
+    "welcome": "Welcome Back, {name}",
+    "subtitle": "Manage and preview your AI CV.",
+    "stats": {
+      "totalViews": {
+        "title": "Total Views",
+        "tooltip": "Number of times recruiters viewed your CV Bot profile"
+      },
+      "cvDownloads": {
+        "title": "CV Downloads",
+        "tooltip": "Number of times recruiters downloaded your CV"
+      },
+      "questionsAnswered": {
+        "title": "Questions Answered",
+        "tooltip": "Total questions answered by your CV Bot during recruiter interactions"
+      },
+      "lastInteraction": {
+        "title": "Last Interaction",
+        "tooltip": "The most recent time a recruiter interacted with your CV Bot",
+        "never": "Never"
+      }
+    },
+    "liveCard": {
+      "status": "Live Status",
+      "title": "Your CV Bot is Live",
+      "updateCv": "Update CV",
+      "share": "Share",
+      "copy": "Copy"
+    },
     "emptyState": {
       "title": "CV not uploaded yet",
       "description": "Upload your CV to begin creating your AI-powered CV Bot.",
@@ -303,7 +350,8 @@
   "createBot": {
     "stepper": {
       "uploadInfo": "Upload Info",
-      "answerQuestions": "Answer Questions",
+      "staticQuestions": "Static Questions",
+      "aiQuestions": "AI Questions",
       "cvAiBotCreating": "CV AI Bot Creating",
       "preview": "Preview",
       "shareCvBot": "Share CV Bot",
@@ -334,13 +382,75 @@
     "fileUpload": {
       "uploadAnother": "Drop Another File",
       "uploadAnotherMobile": "Upload",
+      "uploadFile": "Upload file",
       "browse": "or click to browse",
       "formats": "PDF, DOCX, TXT. max 10 MB"
     },
     "common": {
       "back": "Back",
       "skip": "Skip",
-      "next": "Next"
+      "next": "Next",
+      "submit":"Submit"
+    },
+    "preview": {
+      "title": "Preview Your Chatbot",
+      "subtitle": "Here's how your AI assistant will look. Ready to launch?",
+      "goToShare": "Go to Share"
+    },
+    "share": {
+      "title": "Your CV Bot is ready! 🎉",
+      "subtitle": "Choose how you'd like to share your AI assistant with others.",
+      "scanTitle": "Scan QR Code",
+      "scanSubtitle": "Instant access to your CV Bot",
+      "downloadBtn": "Download QR Code",
+      "or": "or",
+      "back": "Back",
+      "goToDashboard": "Continue to my dashboard"
+    },
+    "processing": {
+      "steps": {
+        "title": "Creating Your CV AI Bot",
+        "subtitle": "Our AI is analyzing your information and building your personalized CV chatbot.",
+        "analyzing": {
+          "title": "Analyzing file",
+          "description": "Extracting key information and experience from your CV"
+        },
+        "generating": {
+          "title": "Generating AI questions",
+          "description": "Our AI is crafting personalized questions based on your profile"
+        },
+        "building": {
+          "title": "Building conversation flow",
+          "description": "Creating natural dialogue patterns for your CV chatbot"
+        },
+        "overallProgress": "Overall Progress"
+      },
+      "failed": {
+        "title": "Processing Failed",
+        "subtitle": "Some files could not be summarized. You can retry them individually.",
+        "cvLabel": "CV / Resume",
+        "certLabel": "Certificate (ID: {id})",
+        "retryAll": "Re-summarize All",
+        "retrying": "Re-summarizing...",
+        "retry": "Retry"
+      },
+      "aiFailed": {
+        "title": "AI Question Generation Failed",
+        "subtitle": "We couldn't generate your personalized questions. Click below to try again.",
+        "regenerate": "Regenerate Questions",
+        "regenerating": "Regenerating..."
+      },
+      "common": {
+        "error": "Something went wrong. Please try again."
+      }
     }
+  },
+  "subscription":{
+    "title":"Subscription Required",
+    "subtitle":" A subscription is required to create your CV chatbot. Our payment page is coming soon — stay tuned!"  
+    ,"comingSoon":"Payment page coming soon",
+    "testing":"For testing purposes only:",
+    "processing":"Processing…",
+    "skip":"Skip Subscription"
   }
 }

@@ -146,7 +146,6 @@ export async function apiPost<T = any>(
   options: RequestOptions = {}
 ): Promise<ApiResponse<T>> {
   const { locale, token, ...config } = options;
-  console.log("Token received:", token);
   const requestConfig: AxiosRequestConfig = {
     ...config,
     params: {

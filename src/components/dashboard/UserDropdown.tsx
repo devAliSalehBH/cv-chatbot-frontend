@@ -40,8 +40,8 @@ export default function UserDropdown() {
     router.push(`/${locale}/auth/login`);
   };
 
-  const userName = user?.name || "User";
-  const userInitials = user?.name ? getInitials(user.name) : "AA";
+  const userName = user?.full_name || "User";
+  const userInitials = user?.full_name ? getInitials(user.full_name) : "AA";
   const direction = locale === "ar" ? "rtl" : "ltr";
 
   return (

@@ -24,19 +24,19 @@ export const UploadCertificates = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-73px)]">
+    <div className="flex flex-col h-full">
       {/* Centered Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+        <h1 className="font-medium text-[32px] text-[#111827] mb-2 text-center">
           {t("uploadCertificates.title")}
         </h1>
-        <p className="text-sm text-gray-500 mb-10 text-center max-w-lg">
+        <p className="font-normal text-[22px] text-[#64748B] mb-10 text-center max-w-[845px]">
           {t("uploadCertificates.subtitle")}
         </p>
 
         {/* Card */}
-        <div className="w-full max-w-xl bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200/60 p-6">
+        <div className="w-full max-w-[845px] bg-[#FCFCFC] rounded-[40px] border-[1.6px] border-solid border-[#E5E7EB] p-8 md:p-12">
           <FileUpload
             onDrop={handleDrop}
             files={certificates}
@@ -53,34 +53,21 @@ export const UploadCertificates = () => {
         {/* Left: Back */}
         <button
           onClick={handleBack}
-          className="w-24 md:w-auto px-4 md:px-7 py-3 md:py-2.5 rounded-xl text-[15px] md:text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-200 shadow-sm bg-white"
+          className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] text-[#101828] border border-[#101828] bg-transparent hover:bg-gray-50 transition-all duration-200 flex flex-col items-center justify-center"
         >
           {t("common.back")}
         </button>
 
-        {/* Middle: Skip (Mobile Only - visually centered in available space) */}
-        <div className="flex-1 flex justify-center md:hidden">
-          <button
-            onClick={handleNext}
-            className="text-[15px] font-medium text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            {t("common.skip")}
-          </button>
-        </div>
+        {/* Center: Empty space after removing skip */}
+        <div className="flex-1 md:hidden" />
 
-        <div className="flex-1 md:flex-none flex items-center justify-end md:gap-6">
-          <button
-            onClick={handleNext}
-            className="hidden md:block text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            {t("common.skip")}
-          </button>
+        <div className="flex-1 md:flex-none flex items-center justify-end">
           <button
             onClick={handleNext}
             disabled={certificates.length === 0}
-            className="flex-1 md:flex-none md:w-auto px-4 md:px-7 py-3 md:py-2.5 rounded-xl text-[15px] md:text-sm font-semibold transition-all duration-200
+            className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] transition-all duration-200 flex flex-col items-center justify-center
               disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
-              enabled:bg-[#0F172A] enabled:text-white enabled:hover:bg-[#1E293B] enabled:shadow-sm"
+              enabled:bg-[#101828] enabled:text-[#FCFCFC] enabled:hover:bg-[#1E293B]"
           >
             {t("common.next")}
           </button>

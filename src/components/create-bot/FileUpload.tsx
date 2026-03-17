@@ -56,11 +56,11 @@ export const FileUpload = ({
         {files.map((file, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4"
+            className="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5"
           >
             {/* File info row */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
                 {/* Check icon */}
                 <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
 
@@ -71,10 +71,10 @@ export const FileUpload = ({
 
                 {/* Name + meta */}
                 <div>
-                  <p className="text-sm font-semibold text-gray-900 leading-tight">
+                  <p className="font-normal text-[18px] text-[#111827] leading-tight">
                     {file.name}
                   </p>
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="font-normal text-[14px] text-[#64748B] mt-1">
                     {(file.size / 1024 / 1024).toFixed(1)} MB &nbsp;·&nbsp;{" "}
                     {getFileType(file)}
                   </p>
@@ -87,18 +87,18 @@ export const FileUpload = ({
                   onClick={() => onRemove(index)}
                   className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-5 h-5" />
                 </button>
               )}
             </div>
 
             {/* Progress bar - full green */}
-            <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full w-full bg-green-500 rounded-full" />
+            <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-2">
+              <div className="h-full w-full bg-[#12B76A] rounded-full" />
             </div>
 
             {/* Upload complete */}
-            <p className="text-xs text-green-600 font-medium mt-1.5">
+            <p className="font-normal text-[14px] text-[#12B76A]">
               Upload complete
             </p>
           </div>
@@ -122,7 +122,7 @@ export const FileUpload = ({
               <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center flex-shrink-0">
                 <UploadCloud className="w-5 h-5 text-blue-500" />
               </div>
-              <p className="text-[13px] md:text-sm font-semibold text-gray-600 md:text-gray-900">
+              <p className="font-normal text-[18px] text-[#111827]">
                 {compactLabel}
               </p>
             </div>
@@ -133,10 +133,9 @@ export const FileUpload = ({
               {/* Desktop Button */}
               <button
                 type="button"
-                onClick={(e) => e.stopPropagation()}
-                className="hidden md:block px-6 py-2 bg-[#0F172A] text-white rounded-lg text-sm font-medium hover:bg-[#1E293B] transition-colors"
+                className="hidden md:block px-6 py-2.5 bg-[#101828] text-[#FCFCFC] rounded-lg font-normal text-[16px] hover:bg-[#1E293B] transition-colors"
               >
-                {t("uploadAnotherMobile")}
+                {t("uploadFile")}
               </button>
 
               {/* Mobile Icon Symbol */}
@@ -159,10 +158,10 @@ export const FileUpload = ({
     <div
       {...getRootProps()}
       className={cn(
-        "w-full border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200 flex flex-col items-center justify-center py-10 md:py-14 px-6",
+        "w-full border-[1.6px] border-dashed rounded-[32px] cursor-pointer transition-all duration-200 flex flex-col items-center justify-center py-10 md:py-16 px-6",
         isDragActive
           ? "border-blue-400 bg-blue-50/60"
-          : "border-gray-300 bg-white/60 hover:border-blue-300 hover:bg-blue-50/30",
+          : "border-[#CBD5E1] bg-transparent hover:border-blue-300 hover:bg-blue-50/30",
       )}
     >
       <input {...getInputProps()} />
@@ -172,13 +171,13 @@ export const FileUpload = ({
         <UploadCloud className="w-7 h-7 text-blue-500" />
       </div>
 
-      <div className="text-base font-bold text-gray-900 mb-1">
+      <div className="font-semibold text-[24px] text-[#101828] mb-1">
         {dropzoneLabel}
       </div>
-      <p className="hidden md:block text-sm text-gray-400 mb-5">{t("browse")}</p>
+      <p className="hidden md:block font-normal text-[16px] text-[#4A5565] mb-5">{t("browse")}</p>
 
       {/* Supported formats */}
-      <div className="flex items-center justify-center gap-1.5 text-[11px] md:text-xs text-gray-400 mb-6 md:mb-6 mt-3 md:mt-0 text-center w-full">
+      <div className="flex items-center justify-center gap-1.5 font-normal text-[14px] text-[#64748B] mb-6 md:mb-6 mt-3 md:mt-0 text-center w-full">
         <FileText className="w-3.5 h-3.5 flex-shrink-0" />
         <span className="hidden md:inline">PDF, DOCX, TXT</span>
         <span className="md:hidden">{t("formats")}</span>
@@ -187,10 +186,9 @@ export const FileUpload = ({
       {/* Upload file button */}
       <button
         type="button"
-        onClick={(e) => e.stopPropagation()}
-        className="px-6 py-2 bg-[#0F172A] text-white rounded-lg text-sm font-medium hover:bg-[#1E293B] transition-colors"
+        className="px-6 py-2.5 bg-[#101828] text-[#FCFCFC] rounded-lg font-normal text-[16px] hover:bg-[#1E293B] transition-colors"
       >
-        {t("uploadAnotherMobile")}
+        {t("uploadFile")}
       </button>
     </div>
   );
