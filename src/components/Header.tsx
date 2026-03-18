@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background-light py-4">
+    <header className="sticky top-0 z-50 bg-background-light py-4" dir="ltr">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Container with rounded corners and shadow */}
         <div className="bg-[#F5F8FFE5] rounded-[20px] shadow-card px-3 md:px-6  py-4">
@@ -31,7 +31,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <div className="w-17.5! md:w-31.5! relative">
                 <Image
-                  src={`/images/logo-${locale}.svg`}
+                  src={`/images/logo-en.svg`}
                   alt="CV Bot"
                   width={100}
                   height={100}

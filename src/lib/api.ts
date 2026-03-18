@@ -59,10 +59,14 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear auth data
       if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-        localStorage.removeItem("profile");
+        import("./auth").then(({ clearAuth }) => clearAuth());
+        // Extract current locale from pathname if possible, fallback to nothing
+        const pathParts = window.location.pathname.split("/");
+        const maybeLocale = pathParts[1];
+        const hasLocale = maybeLocale === "en" || maybeLocale === "ar"; // Or check your supported locales
+        
         // Redirect to login
-        window.location.href = "/auth/login";
+        window.location.href = hasLocale ? `/${maybeLocale}/auth/login` : "/auth/login";
       }
     }
 

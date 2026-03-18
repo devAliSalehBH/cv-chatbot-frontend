@@ -12,7 +12,8 @@ import { apiGet } from "@/lib/api";
  */
 export async function triggerQueueWork(locale: string): Promise<boolean> {
   try {
-    await apiGet("/queue-work", { locale });
+    // Use a 5-minute timeout — the default axios timeout (30s) is too short
+    await apiGet("/queue-work", { locale, timeout: 300_000 });
     console.log("✅ /queue-work triggered");
     return true;
   } catch (err) {
@@ -20,3 +21,4 @@ export async function triggerQueueWork(locale: string): Promise<boolean> {
     return false;
   }
 }
+

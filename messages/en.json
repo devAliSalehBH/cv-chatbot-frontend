@@ -366,7 +366,7 @@
       "next": "Next"
     },
     "uploadCertificates": {
-      "title": "Upload your certificates (Optional)",
+      "title": "Upload your certificates",
       "subtitle": "Add any relevant certificates or courses to strengthen your professional profile."
     },
     "linkedinProfile": {
@@ -395,6 +395,12 @@
     "preview": {
       "title": "Preview Your Chatbot",
       "subtitle": "Here's how your AI assistant will look. Ready to launch?",
+      "badgeLabel": "Live Preview",
+      "greeting": "Hi! I'm your AI assistant. Ask me anything about your professional profile!",
+      "placeholder": "Ask me anything...",
+      "questionsLabel": "questions used",
+      "limitReached": "You've used all 5 preview questions. Ready to share your bot?",
+      "limitPlaceholder": "Preview limit reached",
       "goToShare": "Go to Share"
     },
     "share": {

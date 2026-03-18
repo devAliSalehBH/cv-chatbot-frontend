@@ -64,7 +64,6 @@ export const UploadCertificates = () => {
         <div className="flex-1 md:flex-none flex items-center justify-end">
           <button
             onClick={handleNext}
-            disabled={certificates.length === 0}
             className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] transition-all duration-200 flex flex-col items-center justify-center
               disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
               enabled:bg-[#101828] enabled:text-[#FCFCFC] enabled:hover:bg-[#1E293B]"

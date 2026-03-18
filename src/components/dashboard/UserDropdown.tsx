@@ -13,12 +13,14 @@ import {
 import { removeAuthToken, removeUserProfile, getUserProfile } from "@/lib/auth";
 import { useState } from "react";
 import LogoutModal from "./LogoutModal";
+import { useCreateBotStore } from "@/store/create-bot-store";
 
 export default function UserDropdown() {
   const t = useTranslations("dashboard.userDropdown");
   const locale = useLocale();
   const router = useRouter();
   const user = getUserProfile();
+  const { reset } = useCreateBotStore();
 
   const getInitials = (name: string) => {
     const parts = name.split(" ");
@@ -37,6 +39,7 @@ export default function UserDropdown() {
   const confirmLogout = () => {
     removeAuthToken();
     removeUserProfile();
+    reset(); // Clear bot creation cache from Zustand
     router.push(`/${locale}/auth/login`);
   };
 

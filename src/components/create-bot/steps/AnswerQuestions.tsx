@@ -148,6 +148,14 @@ export const AnswerQuestions = ({
   const answer = getAnswer(question.id);
   const questionText = locale === "ar" ? question.question_ar : question.question_en;
 
+  const isAnswerValid = () => {
+    if (!answer) return false;
+    if (question.type === "checkbox") {
+      return Array.isArray(answer) && answer.length > 0;
+    }
+    return typeof answer === "string" && answer.trim().length > 0;
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
@@ -282,8 +290,8 @@ export const AnswerQuestions = ({
         <div className="flex-1 md:flex-none flex items-center justify-end">
           <button
             onClick={handleNext}
-            disabled={isSubmitting}
-            className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] transition-all duration-200 bg-[#101828] text-[#FCFCFC] hover:bg-[#1E293B] flex items-center justify-center gap-2 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !isAnswerValid()}
+            className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] transition-all duration-200 bg-[#101828] text-[#FCFCFC] hover:bg-[#1E293B] flex items-center justify-center gap-2 shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <>

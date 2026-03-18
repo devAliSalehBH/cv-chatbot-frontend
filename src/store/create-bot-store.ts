@@ -58,6 +58,8 @@ export interface CreateBotState {
 
   isSharePhase: boolean;
   setIsSharePhase: (val: boolean) => void;
+
+  reset: () => void;
 }
 
 export const useCreateBotStore = create<CreateBotState>((set) => ({
@@ -96,4 +98,16 @@ export const useCreateBotStore = create<CreateBotState>((set) => ({
     set((state) => ({
       currentQuestionIndex: Math.max(state.currentQuestionIndex - 1, 0),
     })),
+
+  reset: () =>
+    set({
+      currentStep: "upload-resume",
+      resume: null,
+      certificates: [],
+      linkedinUrl: "",
+      questions: [],
+      currentQuestionIndex: 0,
+      isCreatingDone: false,
+      isSharePhase: false,
+    }),
 }));
