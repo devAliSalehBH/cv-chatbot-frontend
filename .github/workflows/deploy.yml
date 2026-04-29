@@ -1,0 +1,39 @@
+name: Deploy Next.js via SSH
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy on VPS via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ali
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+
+            echo "🚀 Starting deployment..."
+
+            cd /home/ali/var/www/production/cv-bot-platform
+
+            echo "📥 Syncing with GitHub (safe reset)..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "📦 Installing dependencies..."
+            npm install
+
+            echo "🏗️ Building Next.js app..."
+            npm run build
+
+            echo "♻️ Restarting PM2..."
+            pm2 restart cv-bot-platform || pm2 start npm --name "cv-bot-platform" -- start
+            pm2 save
+
+            echo "✅ Deployment completed successfully!"
