@@ -3,7 +3,7 @@ name: 🚀 Deploy to Hostinger VPS (Testing)
 on:
   push:
     branches:
-      - testing   # يُشغَّل عند الـ push على branch التيستنق
+      - testing # يُشغَّل عند الـ push على branch التيستنق
 
   # تشغيل يدوي عند الحاجة
   workflow_dispatch:
@@ -27,8 +27,8 @@ jobs:
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       # ============================================================
       # 3. إنشاء ملف .env.testing
@@ -51,7 +51,7 @@ jobs:
       # 4. تثبيت الاعتماديات
       # ============================
       - name: 📦 Install Dependencies
-        run: npm ci
+        run: npm install
 
       # ============================
       # 5. بناء المشروع باستخدام متغيرات Testing
@@ -112,12 +112,11 @@ jobs:
             cp .env.testing .env.local
 
             echo "📦 Installing production dependencies..."
-            npm ci --omit=dev
+            npm install --omit=dev
 
             echo "🔄 Restarting app with PM2..."
-            pm2 describe cv-chatbot-frontend > /dev/null 2>&1 \
-              && pm2 reload cv-chatbot-frontend --update-env \
-              || pm2 start npm --name "cv-chatbot-frontend" -- start
+            pm2 reload ecosystem.config.js --update-env \
+              || pm2 start ecosystem.config.js
 
             pm2 save
 
