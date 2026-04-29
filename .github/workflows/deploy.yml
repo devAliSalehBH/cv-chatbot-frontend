@@ -1,39 +1,136 @@
-name: Deploy Next.js via SSH
+name: 🚀 Deploy to Hostinger VPS (Testing)
 
 on:
   push:
-    branches: [main]
+    branches:
+      - testing   # يُشغَّل عند الـ push على branch التيستنق
+
+  # تشغيل يدوي عند الحاجة
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
+    name: Build & Deploy → Testing
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - name: Deploy on VPS via SSH
-        uses: appleboy/ssh-action@v1.0.0
+      # ============================
+      # 1. استنساخ الكود
+      # ============================
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      # ============================
+      # 2. إعداد Node.js
+      # ============================
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ali
-          key: ${{ secrets.SSH_KEY }}
-          script: |
+          node-version: '20'
+          cache: 'npm'
+
+      # ============================================================
+      # 3. إنشاء ملف .env.testing
+      #    vars.*    ← GitHub Variables  (قيم غير حساسة، مكشوفة)
+      #    secrets.* ← GitHub Secrets   (مفاتيح حساسة، مشفرة)
+      # ============================================================
+      - name: 📝 Create .env.testing
+        run: |
+          cat > .env.testing << EOF
+          NEXT_PUBLIC_API_BASE_URL=${{ vars.TESTING_API_BASE_URL }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.TESTING_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_DATABASE_URL=${{ vars.TESTING_FIREBASE_DATABASE_URL }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.TESTING_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.TESTING_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.TESTING_FIREBASE_APP_ID }}
+          OPENROUTER_API_KEY=${{ secrets.TESTING_OPENROUTER_API_KEY }}
+          EOF
+
+      # ============================
+      # 4. تثبيت الاعتماديات
+      # ============================
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      # ============================
+      # 5. بناء المشروع باستخدام متغيرات Testing
+      # ============================
+      - name: 🏗️ Build Next.js App
+        run: npm run build
+        env:
+          # Variables (غير حساسة)
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.TESTING_API_BASE_URL }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.TESTING_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_DATABASE_URL: ${{ vars.TESTING_FIREBASE_DATABASE_URL }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.TESTING_FIREBASE_PROJECT_ID }}
+          # Secrets (حساسة)
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.TESTING_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.TESTING_FIREBASE_APP_ID }}
+          OPENROUTER_API_KEY: ${{ secrets.TESTING_OPENROUTER_API_KEY }}
+
+      # ============================
+      # 6. إعداد SSH Key
+      # ============================
+      - name: 🔑 Setup SSH Key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      # ============================
+      # 7. إضافة VPS للـ known_hosts
+      # ============================
+      - name: 🌐 Add VPS to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      # ============================
+      # 8. رفع الملفات إلى VPS عبر rsync
+      #    نرفع .env.testing أيضاً
+      # ============================
+      - name: 📤 Sync Files to VPS
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.env.local' \
+            --exclude='.github' \
+            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_APP_PATH }}/
+
+      # ============================
+      # 9. تثبيت الاعتماديات وإعادة تشغيل التطبيق
+      #    ننسخ .env.testing → .env.local (ما يقرأه Next.js)
+      # ============================
+      - name: 🔄 Install & Restart App on VPS
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             set -e
 
-            echo "🚀 Starting deployment..."
+            cd ${{ secrets.VPS_APP_PATH }}
 
-            cd /home/ali/var/www/production/cv-bot-platform
+            echo "🔧 Applying .env.testing..."
+            cp .env.testing .env.local
 
-            echo "📥 Syncing with GitHub (safe reset)..."
-            git fetch origin main
-            git reset --hard origin/main
+            echo "📦 Installing production dependencies..."
+            npm ci --omit=dev
 
-            echo "📦 Installing dependencies..."
-            npm install
+            echo "🔄 Restarting app with PM2..."
+            pm2 describe cv-chatbot-frontend > /dev/null 2>&1 \
+              && pm2 reload cv-chatbot-frontend --update-env \
+              || pm2 start npm --name "cv-chatbot-frontend" -- start
 
-            echo "🏗️ Building Next.js app..."
-            npm run build
-
-            echo "♻️ Restarting PM2..."
-            pm2 restart cv-bot-platform || pm2 start npm --name "cv-bot-platform" -- start
             pm2 save
 
-            echo "✅ Deployment completed successfully!"
+            echo "✅ Deployment to TESTING completed successfully!"
+          EOF
+
+      # ============================
+      # 10. إشعار بنتيجة الـ Deployment
+      # ============================
+      - name: ✅ Deployment Success
+        if: success()
+        run: echo "🎉 Deployed successfully to Testing environment!"
+
+      - name: ❌ Deployment Failed
+        if: failure()
+        run: echo "💥 Deployment failed! Check the logs above."
