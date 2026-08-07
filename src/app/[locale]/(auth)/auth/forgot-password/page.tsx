@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -195,8 +195,8 @@ export default function ForgotPasswordPage() {
         {/* <p className="text-sm text-center text-gray-600">
           {t("rememberPassword")}{" "}
           <Link
-            href={`/${locale}/auth/login`}
-            className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            href="/auth/login"
+            className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
           >
             {t("loginLink")}
           </Link>

@@ -5,7 +5,7 @@ import { Stepper } from "@/components/create-bot/Stepper";
 import { useCreateBotStore } from "@/store/create-bot-store";
 import { useUserSession, QuestionSessionType } from "@/hooks/useUserSession";
 import { X } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { apiGet } from "@/lib/api";

@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 export default function CallToAction() {
   const t = useTranslations("cta");
   const locale = useLocale();
@@ -23,7 +23,7 @@ export default function CallToAction() {
             {t("description")}
           </p>
           <div className="flex justify-center ">
-            <Link href={`/${locale}/auth/signup`}>
+            <Link href="/auth/signup">
               <Button
                 size="lg"
                 className="bg-black hover:bg-black/80 text-white shadow-button h-11 w-full md:w-71.25 md:h-15 rounded-[10px]  md:rounded-2xl text-[16px] font-semibold"

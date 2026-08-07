@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { getUserProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useUserSession } from "@/hooks/useUserSession";
 import { 

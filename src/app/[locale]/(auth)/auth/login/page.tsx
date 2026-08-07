@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { apiPost, apiGet } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
       // Redirect to dashboard after successful login
       setTimeout(() => {
-        router.replace(`/${locale}/dashboard`);
+        window.location.href = `/${locale}/dashboard`;
       }, 1500);
     } catch (error: any) {
       // Check if it's email not verified error (403)
@@ -210,7 +210,7 @@ export default function LoginPage() {
           {/* Forgot Password Link */}
           <div className="flex justify-start">
             <Link
-              href={`/${locale}/auth/forgot-password`}
+              href="/auth/forgot-password"
               className="text-sm text-[#2E87FE] hover:text-blue-700 transition-colors"
             >
               {t("forgotPassword")}
@@ -237,7 +237,7 @@ export default function LoginPage() {
           <p className="text-sm text-center text-gray-600 pt-4">
             {t("noAccount")}{" "}
             <Link
-              href={`/${locale}/auth/signup`}
+              href="/auth/signup"
               className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
             >
               {t("signUp")}

@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { removeAuthToken, removeUserProfile, getUserProfile } from "@/lib/auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LogoutModal from "./LogoutModal";
 import { useCreateBotStore } from "@/store/create-bot-store";
 
@@ -19,7 +19,9 @@ export default function UserDropdown() {
   const t = useTranslations("dashboard.userDropdown");
   const locale = useLocale();
   const router = useRouter();
-  const user = getUserProfile();
+  const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { reset } = useCreateBotStore();
 
   const getInitials = (name: string) => {
@@ -30,7 +32,10 @@ export default function UserDropdown() {
     return name.substring(0, 2).toUpperCase();
   };
 
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  useEffect(() => {
+    setUser(getUserProfile());
+    setMounted(true);
+  }, []);
 
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
@@ -46,6 +51,18 @@ export default function UserDropdown() {
   const userName = user?.full_name || "User";
   const userInitials = user?.full_name ? getInitials(user.full_name) : "AA";
   const direction = locale === "ar" ? "rtl" : "ltr";
+
+  // Prevent hydration mismatch by rendering a placeholder or not rendering until mounted
+  if (!mounted) {
+    return (
+      <button className="flex items-center gap-2 outline-none opacity-50 cursor-default">
+        <span className="w-10 h-10 rounded-full bg-[linear-gradient(135deg,#111827_0%,#1D4ED8_100%)] text-white flex items-center justify-center text-sm font-semibold">
+          AA
+        </span>
+        <ChevronDown className="w-4 h-4 text-gray-500" />
+      </button>
+    );
+  }
 
   return (
     <>

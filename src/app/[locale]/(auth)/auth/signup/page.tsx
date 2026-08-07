@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { defaultCountries } from "react-international-phone";
 import { apiPost } from "@/lib/api";
@@ -282,14 +282,14 @@ export default function SignupPage() {
           <p className="text-sm text-[#64748B] text-center leading-relaxed pt-16">
             {t("termsPrefix")}{" "}
             <Link
-              href={`/${locale}/terms`}
+              href="/terms"
               className="text-[#2E87FE] hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("termsLink")}
             </Link>{" "}
             {t("and")}{" "}
             <Link
-              href={`/${locale}/privacy`}
+              href="/privacy"
               className="text-[#2E87FE] hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               {t("privacyLink")}
@@ -316,7 +316,7 @@ export default function SignupPage() {
           <p className="text-sm text-center text-[#64748B] pt-4">
             {t("alreadyHaveAccount")}{" "}
             <Link
-              href={`/${locale}/auth/login`}
+              href="/auth/login"
               className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
             >
               {t("login")}

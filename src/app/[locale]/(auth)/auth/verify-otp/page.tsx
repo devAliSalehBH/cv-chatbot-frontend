@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { apiPost } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
 import { setAuthToken, setUserProfile } from "@/lib/auth";
@@ -97,7 +97,7 @@ export default function VerifyOtpPage() {
 
       // Redirect to dashboard
       setTimeout(() => {
-        router.replace(`/${locale}/dashboard`);
+        window.location.href = `/${locale}/dashboard`;
       }, 1000);
     } catch (error: any) {
       const errorMessage = error.response?.data?.message;
@@ -213,7 +213,7 @@ export default function VerifyOtpPage() {
         <p className="text-sm text-center text-gray-600">
           {t("wrongEmail")}{" "}
           <Link
-            href={`/${locale}/auth/signup`}
+            href="/auth/signup"
             className="text-[#2E87FE] hover:text-blue-700 font-medium transition-colors"
           >
             {t("goBack")}

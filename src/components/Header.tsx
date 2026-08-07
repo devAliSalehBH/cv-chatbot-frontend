@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export default function Header() {
   const t = useTranslations("header");
@@ -69,12 +69,15 @@ export default function Header() {
 
             {/* Authentication Section */}
             <div className="flex items-center md:gap-4">
-              <Link href={`/${locale}/auth/login`}>
-                <Button variant="ghost" asChild className="text-">
-                  <p>{t("login")}</p>
+              <Link href="/auth/login">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-[15px] font-medium text-gray-700"
+                >
+                  {t("login")}
                 </Button>
               </Link>
-              <Link href={`/${locale}/auth/signup`}>
+              <Link href="/auth/signup">
                 <Button className="bg-black hover:bg-black/80 text-white shadow-button rounded-[10px]">
                   {t("register")}
                 </Button>
