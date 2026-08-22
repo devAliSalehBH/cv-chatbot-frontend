@@ -95,9 +95,23 @@ export const AnswerQuestions = ({
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-      questions.forEach((q, index) => {
-        formData.append(`answers[${index}][question_id]`, String(q.id));
-        formData.append(`answers[${index}][answer_value]`, formatAnswerValue(q.id));
+      let answerIndex = 0;
+      
+      questions.forEach((q) => {
+        const val = answers[q.id];
+        let isValid = false;
+        
+        if (q.type === "checkbox") {
+          isValid = Array.isArray(val) && val.length > 0;
+        } else {
+          isValid = typeof val === "string" && val.trim().length > 0;
+        }
+
+        if (isValid) {
+          formData.append(`answers[${answerIndex}][question_id]`, String(q.id));
+          formData.append(`answers[${answerIndex}][answer_value]`, formatAnswerValue(q.id));
+          answerIndex++;
+        }
       });
 
       await apiPost(submitUrl, formData, {
@@ -297,7 +311,7 @@ export const AnswerQuestions = ({
         <div className="flex-1 md:hidden" />
 
         <div className="flex-1 md:flex-none flex items-center justify-end gap-3 md:gap-4">
-          {(question.is_ai || question.is_ai_question) && (
+          {fetchUrl.includes("ai") && (
             <button
               onClick={handleSkip}
               disabled={isSubmitting}
