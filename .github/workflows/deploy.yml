@@ -3,18 +3,18 @@ name: 🚀 Deploy to Hostinger VPS (Testing)
 on:
   push:
     branches:
-      - testing # يُشغَّل عند الـ push على branch التيستنق
+      - testing
 
-  # تشغيل يدوي عند الحاجة
   workflow_dispatch:
 
 jobs:
   build-and-deploy:
     name: Build & Deploy → Testing
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
+
       # ============================
       # 1. استنساخ الكود
       # ============================
@@ -30,11 +30,9 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      # ============================================================
+      # ============================
       # 3. إنشاء ملف .env.testing
-      #    vars.*    ← GitHub Variables  (قيم غير حساسة، مكشوفة)
-      #    secrets.* ← GitHub Secrets   (مفاتيح حساسة، مشفرة)
-      # ============================================================
+      # ============================
       - name: 📝 Create .env.testing
         run: |
           cat > .env.testing << EOF
@@ -48,29 +46,7 @@ jobs:
           EOF
 
       # ============================
-      # 4. تثبيت الاعتماديات
-      # ============================
-      - name: 📦 Install Dependencies
-        run: npm install
-
-      # ============================
-      # 5. بناء المشروع باستخدام متغيرات Testing
-      # ============================
-      - name: 🏗️ Build Next.js App
-        run: npm run build
-        env:
-          # Variables (غير حساسة)
-          NEXT_PUBLIC_API_BASE_URL: ${{ vars.TESTING_API_BASE_URL }}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.TESTING_FIREBASE_AUTH_DOMAIN }}
-          NEXT_PUBLIC_FIREBASE_DATABASE_URL: ${{ vars.TESTING_FIREBASE_DATABASE_URL }}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.TESTING_FIREBASE_PROJECT_ID }}
-          # Secrets (حساسة)
-          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.TESTING_FIREBASE_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.TESTING_FIREBASE_APP_ID }}
-          OPENROUTER_API_KEY: ${{ secrets.TESTING_OPENROUTER_API_KEY }}
-
-      # ============================
-      # 6. إعداد SSH Key
+      # 4. إعداد SSH Key
       # ============================
       - name: 🔑 Setup SSH Key
         uses: webfactory/ssh-agent@v0.9.0
@@ -78,58 +54,127 @@ jobs:
           ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
 
       # ============================
-      # 7. إضافة VPS للـ known_hosts
+      # 5. إضافة VPS إلى known_hosts
       # ============================
       - name: 🌐 Add VPS to known_hosts
         run: |
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       # ============================
-      # 8. رفع الملفات إلى VPS عبر rsync
-      #    نرفع .env.testing أيضاً
+      # 6. رفع Source Code إلى VPS
       # ============================
       - name: 📤 Sync Files to VPS
         run: |
           rsync -avz --delete \
             --exclude='.git' \
             --exclude='node_modules' \
+            --exclude='.next' \
             --exclude='.env.local' \
             --exclude='.github' \
             ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_APP_PATH }}/
 
       # ============================
-      # 9. تثبيت الاعتماديات وإعادة تشغيل التطبيق
-      #    ننسخ .env.testing → .env.local (ما يقرأه Next.js)
+      # 7. Build & Restart على VPS
       # ============================
-      - name: 🔄 Install & Restart App on VPS
+      - name: 🔨 Build & Restart App on VPS
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             set -e
 
             cd ${{ secrets.VPS_APP_PATH }}
 
+            echo "========================================"
+            echo "🚀 Starting Testing Deployment"
+            echo "========================================"
+
+            # --------------------------------
+            # تطبيق Environment Variables
+            # --------------------------------
             echo "🔧 Applying .env.testing..."
             cp .env.testing .env.local
 
-            echo "📦 Installing production dependencies..."
-            npm install --omit=dev
+            # --------------------------------
+            # إيقاف التطبيق القديم
+            # --------------------------------
+            echo "🛑 Stopping old PM2 process..."
 
-            echo "🔄 Restarting app with PM2..."
-            pm2 reload ecosystem.config.js --update-env \
-              || pm2 start ecosystem.config.js
+            pm2 stop ecosystem.config.js || true
+
+            # --------------------------------
+            # حذف Build القديم
+            # --------------------------------
+            echo "🧹 Removing old Next.js build..."
+
+            rm -rf .next
+
+            # --------------------------------
+            # تثبيت Dependencies
+            # --------------------------------
+            echo "📦 Installing dependencies..."
+
+            npm ci
+
+            # --------------------------------
+            # Build على VPS
+            # --------------------------------
+            echo "🏗️ Building Next.js application..."
+
+            npm run build
+
+            # --------------------------------
+            # تشغيل التطبيق
+            # --------------------------------
+            echo "🚀 Starting application..."
+
+            pm2 start ecosystem.config.js --update-env
+
+            # --------------------------------
+            # حفظ PM2
+            # --------------------------------
+            echo "💾 Saving PM2 process list..."
 
             pm2 save
 
-            echo "✅ Deployment to TESTING completed successfully!"
+            # --------------------------------
+            # انتظار تشغيل Next.js
+            # --------------------------------
+            echo "⏳ Waiting for Next.js to start..."
+
+            sleep 5
+
+            # --------------------------------
+            # فحص PM2
+            # --------------------------------
+            echo "🔍 Checking PM2 status..."
+
+            pm2 status
+
+            # --------------------------------
+            # فحص Port 3000
+            # --------------------------------
+            echo "🔍 Checking application on port 3000..."
+
+            curl -f http://127.0.0.1:3000
+
+            echo ""
+            echo "========================================"
+            echo "✅ Testing Deployment Successful!"
+            echo "========================================"
           EOF
 
       # ============================
-      # 10. إشعار بنتيجة الـ Deployment
+      # 8. Deployment Success
       # ============================
       - name: ✅ Deployment Success
         if: success()
-        run: echo "🎉 Deployed successfully to Testing environment!"
+        run: |
+          echo "🎉 Deployed successfully to Testing environment!"
 
+      # ============================
+      # 9. Deployment Failed
+      # ============================
       - name: ❌ Deployment Failed
         if: failure()
-        run: echo "💥 Deployment failed! Check the logs above."
+        run: |
+          echo "💥 Deployment failed!"
+          echo "Check the logs above for details."

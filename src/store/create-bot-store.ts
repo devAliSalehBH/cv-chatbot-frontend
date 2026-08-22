@@ -25,6 +25,8 @@ export interface Question {
   question_ar: string;
   question_en: string;
   order: number;
+  is_ai?: boolean;
+  is_ai_question?: boolean;
   options: QuestionOption[];
 }
 

@@ -128,6 +128,15 @@ export const AnswerQuestions = ({
     }
   };
 
+  const handleSkip = async () => {
+    // Optionally clear the answer, or leave it as is if it's already empty
+    if (isLastQuestion) {
+      await handleSubmitAll();
+    } else {
+      nextQuestion();
+    }
+  };
+
   const handleBack = () => {
     prevQuestion();
   };
@@ -287,7 +296,17 @@ export const AnswerQuestions = ({
         {/* Center: Empty space after removing skip */}
         <div className="flex-1 md:hidden" />
 
-        <div className="flex-1 md:flex-none flex items-center justify-end">
+        <div className="flex-1 md:flex-none flex items-center justify-end gap-3 md:gap-4">
+          {(question.is_ai || question.is_ai_question) && (
+            <button
+              onClick={handleSkip}
+              disabled={isSubmitting}
+              className="flex-1 md:flex-none md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] text-[#64748B] bg-transparent hover:bg-gray-50 transition-all duration-200 flex items-center justify-center shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {t("common.skip")}
+            </button>
+          )}
+
           <button
             onClick={handleNext}
             disabled={isSubmitting || !isAnswerValid()}
