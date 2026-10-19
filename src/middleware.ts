@@ -15,7 +15,7 @@ export default function middleware(request: NextRequest) {
     const locale = pathname.split("/")[1]; // e.g., 'ar' or 'en'
 
     // Define protected routes (require authentication)
-    const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+    const protectedRoutes = ["/dashboard", "/profile", "/settings", "/pricing", "/payment"];
 
     // Define auth routes (should redirect away if authenticated)
     const authRoutes = [

@@ -200,7 +200,7 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <Link href="/create-bot">
+            <Link href="/pricing">
               <Button className="bg-[#101828] hover:bg-[#1E293B] px-8 h-[52px] rounded-[16px] shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98]">
                 <span className="text-[#FCFCFC] text-[16px] font-medium">
                   {t("emptyState.button")}

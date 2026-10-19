@@ -86,8 +86,23 @@ export default function LoginPage() {
       }
 
       // Redirect to dashboard after successful login
+      // Honour ?redirect= (e.g. coming from the pricing section); if the user
+      // picked a plan before logging in, send them back to pricing to continue.
+      const redirectParam = new URLSearchParams(window.location.search).get(
+        "redirect",
+      );
+      const hasPendingPlan = !!sessionStorage.getItem("pending_plan");
+      const safeRedirect =
+        redirectParam &&
+        redirectParam.startsWith("/") &&
+        !redirectParam.startsWith("//")
+          ? redirectParam
+          : hasPendingPlan
+            ? "/pricing"
+            : "/dashboard";
+
       setTimeout(() => {
-        window.location.href = `/${locale}/dashboard`;
+        window.location.href = `/${locale}${safeRedirect}`;
       }, 1500);
     } catch (error: any) {
       // Check if it's email not verified error (403)

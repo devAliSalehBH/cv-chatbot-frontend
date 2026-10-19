@@ -75,10 +75,56 @@
       ]
     }
   },
+  "payment": {
+    "checkingTitle": "Confirming your payment",
+    "checkingDesc": "Please wait a moment, this won't take long.",
+    "successTitle": "Payment successful",
+    "successDesc": "Your subscription is now active.",
+    "orderNumber": "Order number",
+    "plan": "Plan",
+    "amountPaid": "Amount paid",
+    "startBuilding": "Start building your CV Bot",
+    "goDashboard": "Go to dashboard",
+    "failedTitle": "Payment failed",
+    "failedDesc": "The payment was declined or cancelled.",
+    "tryAgain": "Try again",
+    "timeoutTitle": "Still processing",
+    "timeoutDesc": "We haven't received the payment confirmation yet. Check again in a moment.",
+    "checkAgain": "Check again",
+    "missingTitle": "No order found",
+    "missingDesc": "We couldn't find a payment to check.",
+    "backToPricing": "Back to pricing"
+  },
   "pricing": {
     "title": "Pricing",
     "subtitle": "Simple, Transparent Pricing",
     "description": "Choose a plan that fits your career goals. No hidden fees.",
+    "badge": "Most Popular",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "trial": "{days}-day free trial",
+    "vatNote": "Prices exclude 15% VAT.",
+    "subscribe": "Subscribe",
+    "loadError": "We couldn't load the plans. Please try again.",
+    "retry": "Try again",
+    "noPlans": "No plans are available right now.",
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save {percent}%"
+    },
+    "checkout": {
+      "title": "Complete your subscription",
+      "orderSummary": "Order summary",
+      "total": "Total",
+      "coupon": "Have a coupon?",
+      "optional": "Optional",
+      "couponPlaceholder": "Enter coupon code",
+      "pay": "Pay {amount}",
+      "secureNote": "You'll be redirected to a secure payment page.",
+      "redirecting": "Redirecting to payment...",
+      "genericError": "We couldn't start the payment. Please try again."
+    },
     "monthly": {
       "title": "Premium",
       "price": "$5",
