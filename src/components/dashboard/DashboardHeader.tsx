@@ -4,6 +4,7 @@ import { useLocale } from "next-intl";
 import Image from "next/image";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import UserDropdown from "./UserDropdown";
+import { Link } from "@/i18n/navigation";
 
 export default function DashboardHeader() {
   const locale = useLocale();
@@ -16,14 +17,14 @@ export default function DashboardHeader() {
           <div className="flex items-center justify-between">
             {/* Logo Section */}
             <div className="flex items-center gap-3">
-              <div className="w-17.5! md:w-31.5! relative">
+              <Link href="/dashboard" aria-label="CV Bot" className="w-17.5! md:w-31.5! relative">
                 <Image
                   src={`/images/logo-en.svg`}
                   alt="CV Bot"
                   width={100}
                   height={100}
                 />
-              </div>
+              </Link>
               <div className="">
                 <LanguageSwitcher />
               </div>

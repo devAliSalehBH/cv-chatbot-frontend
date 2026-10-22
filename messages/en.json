@@ -318,7 +318,7 @@
     "greeting": "Hi! I'm an AI assistant trained on this professional's resume. Feel free to ask me anything!",
     "strongMatch": "Strong match for required skills:",
     "variousSkills": "Various professional skills.",
-    "experience": "{years} years of experience in the field",
+    "experience": "{years} years of experience in the field", "experienceIn": "{years} years of experience in {field}",
     "contactInfo": "Contact Info",
     "noEmail": "No email provided",
     "noPhone": "No phone provided",
@@ -394,6 +394,11 @@
     "copyright": "© 2026 All rights reserved."
   },
   "createBot": {
+    "existingFiles": {
+      "existingFile": "Uploaded earlier",
+      "replace": "Replace",
+      "keep": "Using your uploaded file"
+    },
     "stepper": {
       "uploadInfo": "Upload Info",
       "staticQuestions": "Static Questions",
@@ -483,7 +488,7 @@
         "cvLabel": "CV / Resume",
         "certLabel": "Certificate (ID: {id})",
         "retryAll": "Re-summarize All",
-        "retrying": "Re-summarizing...",
+        "retrying": "Re-summarizing...", "error": "Something went wrong. Please try again.", "nothingToRetry": "No files need re-processing. Refresh the page or upload your files again.",
         "retry": "Retry"
       },
       "aiFailed": {
@@ -504,5 +509,94 @@
     "testing":"For testing purposes only:",
     "processing":"Processing…",
     "skip":"Skip Subscription"
+  },
+  "settings": {
+    "nav": {
+      "label": "Settings",
+      "account": "Account",
+      "myProfile": "My Profile",
+      "myResume": "My Resume",
+      "billing": "Subscription & Billing",
+      "subscription": "Subscription & Billing"
+    },
+    "profile": {
+      "professional": {
+        "title": "Professional Info",
+        "description": "Your field and experience as shown on your CV bot page"
+      },
+      "contact": {
+        "title": "Contact Info",
+        "description": "How recruiters can reach you from your CV bot page",
+        "hint": "These details are public on your bot page and are separate from your login email and phone."
+      },
+      "fields": {
+        "jobTitle": "Field / Job title",
+        "years": "Years of experience",
+        "email": "Email",
+        "phone": "Phone number",
+        "location": "Location"
+      },
+      "placeholders": {
+        "jobTitle": "e.g. Senior Frontend Developer",
+        "years": "e.g. 6",
+        "email": "name@example.com",
+        "location": "e.g. Riyadh, Saudi Arabia"
+      },
+      "errors": {
+        "years": "Enter a whole number between 0 and 60",
+        "email": "Enter a valid email address"
+      },
+      "save": "Save changes",
+      "saved": "Your profile has been updated",
+      "saveFailed": "Failed to save your profile. Please try again."
+    },
+    "resume": {
+      "documents": {
+        "title": "Resume & Documents",
+        "description": "Manage your uploaded documents and certifications",
+        "empty": "You didn't upload any files",
+        "uploadNew": "Upload new",
+        "uploadCv": "Upload CV",
+        "addCertificate": "Add certificate"
+      },
+      "files": {
+        "cvBadge": "CV",
+        "certificateBadge": "Certificate",
+        "replace": "Replace",
+        "delete": "Delete",
+        "processing": "Your files are being processed. You can replace your CV once processing is done."
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "description": "Manage your LinkedIn account URL",
+        "label": "LinkedIn URL",
+        "placeholder": "paste your Linkedin URL here..",
+        "hint": "Saved automatically when you leave the field",
+        "invalid": "Enter a valid LinkedIn URL (https://www.linkedin.com/in/...)",
+        "saved": "LinkedIn URL saved"
+      },
+      "warning": {
+        "title": "Change your CV?",
+        "description": "Changing your CV will require you to answer the questions again, and your bot will stop working until you finish answering them.",
+        "cancel": "Cancel",
+        "confirm": "Yes, change CV"
+      },
+      "banner": {
+        "text": "Your CV bot isn't live yet. Complete the remaining steps to get it working.",
+        "action": "Continue setup"
+      },
+      "success": {
+        "cvUploaded": "Your CV has been uploaded",
+        "cvReplaced": "Your CV has been replaced",
+        "cvReplacedReset": "Your CV has been replaced. Answer the new questions to bring your bot back online.",
+        "certificatesAdded": "Certificates uploaded",
+        "certificateDeleted": "Certificate deleted"
+      },
+      "errors": {
+        "uploadFailed": "Something went wrong. Please try again.",
+        "fileType": "Unsupported file type. Allowed: {types}",
+        "fileSize": "File is too large. Maximum size is 5 MB."
+      }
+    }
   }
 }

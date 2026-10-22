@@ -11,12 +11,14 @@ export interface PhoneNumberInputProps {
   onBlur?: () => void;
   disabled?: boolean;
   className?: string;
+  /** ISO2 country used when the value has no dial code. Defaults to "sa". */
+  defaultCountry?: string;
 }
 
 const PhoneNumberInput = React.forwardRef<
   HTMLInputElement,
   PhoneNumberInputProps
->(({ className, value, onChange, onBlur, disabled, ...props }, ref) => {
+>(({ className, value, onChange, onBlur, disabled, defaultCountry = "sa", ...props }, ref) => {
   // Debounce onChange to improve performance
   const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
   const handleChange = React.useCallback(
@@ -34,7 +36,7 @@ const PhoneNumberInput = React.forwardRef<
   return (
     <div className={cn("w-full", className)}>
       <InternationalPhoneInput
-        defaultCountry="sa"
+        defaultCountry={defaultCountry}
         value={value || ""}
         onChange={handleChange}
         onBlur={onBlur}

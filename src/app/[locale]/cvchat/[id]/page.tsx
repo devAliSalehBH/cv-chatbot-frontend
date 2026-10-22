@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { apiGet } from "@/lib/api";
 import { useParams } from "next/navigation";
 import { SYSTEM_PROMPT_TEMPLATE } from "@/lib/prompt";
+import { accountPhone } from "@/lib/profile";
 import Image from "next/image";
 import { ref, runTransaction, set } from "firebase/database";
 import { db } from "@/lib/firebase";
@@ -251,12 +252,14 @@ export default function CVChatPage() {
   const name = profileData?.full_name || botData?.full_name || "Applicant";
   const firstName = name.split(" ")[0];
   const initials = name.split(" ").map((n: string) => n[0]).join("").substring(0, 2).toUpperCase();
-  const jobTitle = profileData?.job_title || botData?.job_title || "Professional";
-  const yearsExperience = profileData?.years_of_experience || botData?.years_of_experience || "X";
+  // Set by the user in Settings → My Profile
+  const jobTitle = profileData?.job_title || botData?.job_title || "";
+  const yearsExperience = profileData?.years_of_experience ?? botData?.years_of_experience ?? null;
+  const hasExperience = yearsExperience !== null && yearsExperience !== undefined && yearsExperience !== "";
   const skills = profileData?.skills || botData?.skills || [];
-  const email = profileData?.email || botData?.email || null;
-  // API returns 'phone' not 'phone_number'
-  const phone = profileData?.phone || profileData?.phone_number || botData?.phone || botData?.phone_number || null;
+  // Public contact info (backend falls back to the account email/phone)
+  const email = profileData?.contact_email || profileData?.email || botData?.email || null;
+  const phone = profileData?.contact_phone || accountPhone(profileData) || botData?.phone || null;
   const location = profileData?.location || botData?.location || null;
   // CV url is nested: data.cv.url
   const cvUrl = profileData?.cv?.url || profileData?.file_url || botData?.cv?.url || botData?.file_url || null;
@@ -462,7 +465,7 @@ export default function CVChatPage() {
               {initials}
             </div>
             <h2 className="text-[20px] md:text-[24px] font-semibold text-[#111827] mb-1">{name}</h2>
-            <p className="text-[14px] text-[#64748B] font-medium">{jobTitle}</p>
+            {jobTitle && <p className="text-[14px] text-[#64748B] font-medium">{jobTitle}</p>}
           </div>
 
           {/* Match & Experience Overview */}
@@ -478,14 +481,18 @@ export default function CVChatPage() {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5 shrink-0">
-                <Briefcase size={18} className="text-[#2C85FE]" />
+            {hasExperience && (
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 shrink-0">
+                  <Briefcase size={18} className="text-[#2C85FE]" />
+                </div>
+                <p className="text-[13px] text-[#111827] font-medium leading-relaxed">
+                  {jobTitle
+                    ? t("experienceIn", { years: yearsExperience, field: jobTitle })
+                    : t("experience", { years: yearsExperience })}
+                </p>
               </div>
-              <p className="text-[13px] text-[#111827] font-medium leading-relaxed">
-                {t("experience", { years: yearsExperience })}
-              </p>
-            </div>
+            )}
           </div>
 
           {/* Contact Info */}
@@ -498,7 +505,7 @@ export default function CVChatPage() {
               </div>
               <div className="flex items-center gap-3 text-[#64748B]">
                 <Phone size={16} />
-                <span className="text-[13px]">{phone || t("noPhone")}</span>
+                <span className="text-[13px]" dir="ltr">{phone || t("noPhone")}</span>
               </div>
               <div className="flex items-center gap-3 text-[#64748B]">
                 <MapPin size={16} />

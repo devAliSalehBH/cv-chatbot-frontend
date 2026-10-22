@@ -2,11 +2,19 @@
 
 import { useCreateBotStore } from "@/store/create-bot-store";
 import { FileUpload } from "@/components/create-bot/FileUpload";
+import { ExistingFileCard } from "@/components/create-bot/ExistingFileCard";
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
+
+const RESUME_ACCEPT = ".pdf,.doc,.docx";
 
 export const UploadResume = () => {
   const t = useTranslations("createBot.uploadResume");
-  const { setResume, setStep, resume } = useCreateBotStore();
+  const { setResume, setStep, resume, existingCv } = useCreateBotStore();
+  const replaceInputRef = useRef<HTMLInputElement>(null);
+
+  // A CV uploaded earlier (e.g. from settings) can be kept or replaced
+  const showExisting = !resume && !!existingCv;
 
   const handleDrop = (files: File[]) => {
     if (files.length > 0) {
@@ -15,7 +23,7 @@ export const UploadResume = () => {
   };
 
   const handleNext = () => {
-    if (resume) {
+    if (resume || existingCv) {
       setStep("upload-certificates");
     }
   };
@@ -34,17 +42,37 @@ export const UploadResume = () => {
 
         {/* Card */}
         <div className="w-full max-w-[845px] bg-[#FCFCFC] rounded-[40px] border-[1.6px] border-solid border-[#E5E7EB] p-8 md:p-12">
-          <FileUpload
-            onDrop={handleDrop}
-            files={resume ? [resume] : []}
-            onRemove={() => setResume(null)}
-            dropzoneLabel={
-              <>
-                <span className="hidden md:inline">{t("title")}</span>
-                <span className="md:hidden">{t("mobileTitle")}</span>
-              </>
-            }
-          />
+          {showExisting && existingCv ? (
+            <>
+              <ExistingFileCard
+                media={existingCv}
+                onReplace={() => replaceInputRef.current?.click()}
+              />
+              <input
+                ref={replaceInputRef}
+                type="file"
+                accept={RESUME_ACCEPT}
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  e.target.value = "";
+                  if (file) setResume(file);
+                }}
+              />
+            </>
+          ) : (
+            <FileUpload
+              onDrop={handleDrop}
+              files={resume ? [resume] : []}
+              onRemove={() => setResume(null)}
+              dropzoneLabel={
+                <>
+                  <span className="hidden md:inline">{t("title")}</span>
+                  <span className="md:hidden">{t("mobileTitle")}</span>
+                </>
+              }
+            />
+          )}
         </div>
       </div>
 
@@ -52,7 +80,7 @@ export const UploadResume = () => {
       <div className="flex justify-end items-center px-6 md:px-8 py-5 w-full max-w-7xl mx-auto">
         <button
           onClick={handleNext}
-          disabled={!resume}
+          disabled={!resume && !existingCv}
           className="w-full md:w-[184px] h-[60px] rounded-[16px] font-normal text-[16px] transition-all duration-200 flex flex-col items-center justify-center
             disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
             enabled:bg-[#101828] enabled:text-[#FCFCFC] enabled:hover:bg-[#1E293B]"

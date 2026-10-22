@@ -8,13 +8,18 @@ import { Input } from "@/components/ui/input";
 import { useTranslations, useLocale } from "next-intl";
 import { apiPost } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
-import { triggerQueueWork } from "@/lib/queueWork";
 
 export const LinkedInProfile = () => {
   const t = useTranslations("createBot");
   const locale = useLocale();
-  const { linkedinUrl, setLinkedinUrl, setStep, resume, certificates } =
-    useCreateBotStore();
+  const {
+    linkedinUrl,
+    setLinkedinUrl,
+    setStep,
+    resume,
+    certificates,
+    deletedCertificateIds,
+  } = useCreateBotStore();
   const { showAlert } = useAlertStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,6 +38,11 @@ export const LinkedInProfile = () => {
         formData.append("add_certificates[]", cert);
       });
 
+      // Certificates uploaded earlier that the user removed in step 2
+      deletedCertificateIds.forEach((id) => {
+        formData.append("delete_certificates[]", String(id));
+      });
+
       // Attach LinkedIn URL if provided
       if (!isSkip && linkedinUrl) {
         formData.append("linkedin_url", linkedinUrl);
@@ -45,7 +55,6 @@ export const LinkedInProfile = () => {
         },
       });
 
-      await triggerQueueWork(locale);
 
       // Move to processing screen
       setStep("processing");

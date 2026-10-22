@@ -7,7 +7,6 @@ import { apiGet } from "@/lib/api";
 import { ref, set } from "firebase/database";
 import { db } from "@/lib/firebase";
 import { getUserProfile } from "@/lib/auth";
-import { triggerQueueWork } from "@/lib/queueWork";
 
 export default function SubscriptionPage() {
    const t = useTranslations("subscription");
@@ -42,8 +41,6 @@ export default function SubscriptionPage() {
       console.error("⚠️ Failed to initialise Firebase session:", fbErr);
     }
 
-    // ── 2. Trigger queue worker (temporary — see queueWork.ts) ───────────────
-    await triggerQueueWork(locale);
 
     // ── 3. Navigate to create-bot ────────────────────────────────────────────
     router.replace(`/${locale}/create-bot`);

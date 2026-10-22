@@ -88,12 +88,18 @@ export default function UserDropdown() {
               <p className="text-lg font-semibold text-[#333333]">{userName}</p>
             </div>
           </div>
-          <DropdownMenuItem className="cursor-pointer px-3 border-t h-14 border-[#E5E7EB] rounded-none focus:bg-blue-50 focus:text-blue-900">
+          <DropdownMenuItem
+            onClick={() => router.push(`/${locale}/settings/profile`)}
+            className="cursor-pointer px-3 border-t h-14 border-[#E5E7EB] rounded-none focus:bg-blue-50 focus:text-blue-900"
+          >
             <User className=" text-gray-500" />
             <span className="font-medium text-gray-700">{t("myAccount")}</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="cursor-pointer py-2.5 px-3 border-t h-14 border-[#E5E7EB] rounded-none focus:bg-blue-50 focus:text-blue-900">
+          <DropdownMenuItem
+            onClick={() => router.push(`/${locale}/settings/subscription`)}
+            className="cursor-pointer py-2.5 px-3 border-t h-14 border-[#E5E7EB] rounded-none focus:bg-blue-50 focus:text-blue-900"
+          >
             <CreditCard className=" text-gray-500" />
             <span className="font-medium text-gray-700">
               {t("subscription")}

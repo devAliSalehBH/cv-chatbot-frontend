@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { apiPost } from "@/lib/api";
-import { triggerQueueWork } from "@/lib/queueWork";
 import { ProcessingSteps } from "../ProcessingSteps";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -32,7 +31,6 @@ export const AIGeneratingScreen = ({ status }: AIGeneratingScreenProps) => {
     setRetryError(false);
     try {
       await apiPost("/users/questions/ai/regenerate", null, { locale });
-      await triggerQueueWork(locale);
     } catch (err) {
       console.error("❌ AI regenerate failed:", err);
       setRetryError(true);

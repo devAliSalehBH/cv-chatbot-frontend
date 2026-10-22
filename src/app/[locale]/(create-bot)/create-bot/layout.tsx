@@ -43,12 +43,15 @@ export default function CreateBotLayout({
           setUserProfile(profile);
           console.log("✅ User profile refreshed on create-bot entry");
 
-          // Subscription guard: redirect to payment page if not subscribed
+          // Subscription guard (backup for middleware.ts): redirect to pricing if not subscribed
           if (profile.has_active_subscription === false) {
-            console.log("🔒 No active subscription — redirecting to subscription page");
-            router.replace(`/${locale}/subscription`);
+            console.log("🔒 No active subscription — redirecting to pricing page");
+            router.replace(`/${locale}/pricing`);
             return;
           }
+
+          // Show files uploaded earlier (e.g. from settings) in step 1
+          useCreateBotStore.getState().hydrateFromProfile(profile);
         }
       } catch (error: any) {
         // Ignore errors from aborted requests

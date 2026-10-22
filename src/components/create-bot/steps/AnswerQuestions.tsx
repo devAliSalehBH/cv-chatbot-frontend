@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslations, useLocale } from "next-intl";
 import { apiGet, apiPost } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
-import { triggerQueueWork } from "@/lib/queueWork";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -119,7 +118,6 @@ export const AnswerQuestions = ({
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      await triggerQueueWork(locale);
 
       // Firebase / backend will update question_session_type to the next phase
       console.log("✅ Answers submitted successfully");

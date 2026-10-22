@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { apiGet, apiPost } from "@/lib/api";
-import { triggerQueueWork } from "@/lib/queueWork";
 import { ProcessingSteps } from "../ProcessingSteps";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type UploadItemStatus = "pending" | "processing" | "success" | "failed";
+type UploadItemStatus = "pending" | "processing" | "completed" | "failed";
 
 interface UploadItem {
   id: number | null;
@@ -39,41 +38,62 @@ export const ProcessingScreen = ({ status }: ProcessingScreenProps) => {
 
   // Single retry state for all failed files
   const [isRetrying, setIsRetrying] = useState(false);
-  const [retryError, setRetryError] = useState(false);
+  const [retryError, setRetryError] = useState<string | null>(null);
 
   // ── When entering "failed" state, fetch upload status to get file IDs ───────
 
+  const fetchUploadStatus = async (): Promise<UploadStatusData | null> => {
+    setIsFetchingStatus(true);
+    try {
+      const response = await apiGet("/users/profile/upload-status", { locale });
+      const data: UploadStatusData = response.data?.data;
+      if (data) setUploadData(data);
+      return data ?? null;
+    } catch (err) {
+      console.error("❌ Failed to fetch upload status:", err);
+      return null;
+    } finally {
+      setIsFetchingStatus(false);
+    }
+  };
+
   useEffect(() => {
     if (status !== "failed") return;
-
-    const fetchUploadStatus = async () => {
-      setIsFetchingStatus(true);
-      try {
-        const response = await apiGet("/users/profile/upload-status", { locale });
-        const data: UploadStatusData = response.data?.data;
-        if (data) setUploadData(data);
-      } catch (err) {
-        console.error("❌ Failed to fetch upload status:", err);
-      } finally {
-        setIsFetchingStatus(false);
-      }
-    };
-
     fetchUploadStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
+  /**
+   * Files to re-summarize: everything not summarized yet. Besides "failed",
+   * a file can be left "pending"/"processing" by a job that never ran or was
+   * killed — the session stays failed until ALL files are summarized.
+   */
+  const getRetryItems = (data: UploadStatusData | null): UploadItem[] =>
+    data
+      ? [data.cv, ...(data.certificates ?? [])].filter(
+          (item): item is UploadItem => !!item && item.id !== null && item.status !== "completed"
+        )
+      : [];
+
   // ── Retry all failed files in one request ────────────────────────────────────
 
   const handleRetryAll = async () => {
-    if (failedItems.length === 0) return;
     setIsRetrying(true);
-    setRetryError(false);
+    setRetryError(null);
 
     try {
+      // Status may be missing/stale (e.g. the first fetch failed) — refresh it first
+      let items = failedItems;
+      if (items.length === 0) {
+        items = getRetryItems(await fetchUploadStatus());
+      }
+      if (items.length === 0) {
+        setRetryError(t("failed.nothingToRetry"));
+        return;
+      }
+
       const formData = new FormData();
-      failedItems.forEach((item, index) => {
-        if (item.id === null) return;
+      items.forEach((item, index) => {
         formData.append(`uploads[${index}][id]`, String(item.id));
         formData.append(`uploads[${index}][collection_name]`, item.collection_name);
       });
@@ -83,13 +103,12 @@ export const ProcessingScreen = ({ status }: ProcessingScreenProps) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      await triggerQueueWork(locale);
 
       // Firebase will update question_session_type when backend finishes —
       // the UI will react automatically via the useUserSession listener.
-    } catch (err) {
+    } catch (err: any) {
       console.error("❌ Re-summarize failed:", err);
-      setRetryError(true);
+      setRetryError(err?.response?.data?.message || t("failed.error"));
     } finally {
       setIsRetrying(false);
     }
@@ -97,12 +116,7 @@ export const ProcessingScreen = ({ status }: ProcessingScreenProps) => {
 
   // ── Derive failed items from upload status data ───────────────────────────────
 
-  const failedItems: UploadItem[] = uploadData
-    ? [
-        ...(uploadData.cv?.status === "failed" ? [uploadData.cv] : []),
-        ...(uploadData.certificates?.filter((c) => c.status === "failed") ?? []),
-      ]
-    : [];
+  const failedItems: UploadItem[] = getRetryItems(uploadData);
 
   // ── Failed UI ─────────────────────────────────────────────────────────────────
 
@@ -153,9 +167,7 @@ export const ProcessingScreen = ({ status }: ProcessingScreenProps) => {
 
               {/* Single re-summarize button */}
               {retryError && (
-                <p className="text-xs text-red-400 text-center">
-                  {t("common.error")}
-                </p>
+                <p className="text-xs text-red-400 text-center">{retryError}</p>
               )}
               <button
                 onClick={handleRetryAll}
@@ -167,12 +179,19 @@ export const ProcessingScreen = ({ status }: ProcessingScreenProps) => {
               </button>
             </div>
           ) : (
-            <button
+            <div className="w-full flex flex-col gap-3">
+              {retryError && (
+                <p className="text-xs text-red-400 text-center">{retryError}</p>
+              )}
+              <button
                 onClick={handleRetryAll}
-                className="w-full px-6 py-3 rounded-xl bg-[#101828] text-white"
-            >
-                {t("failed.retry")}
-            </button>
+                disabled={isRetrying}
+                className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-[#101828] text-white disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRetrying ? "animate-spin" : ""}`} />
+                {isRetrying ? t("failed.retrying") : t("failed.retry")}
+              </button>
+            </div>
           )}
         </div>
       </div>

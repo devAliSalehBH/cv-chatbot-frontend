@@ -2,12 +2,19 @@
 
 import { useCreateBotStore } from "@/store/create-bot-store";
 import { FileUpload } from "@/components/create-bot/FileUpload";
+import { ExistingFileCard } from "@/components/create-bot/ExistingFileCard";
 import { useTranslations } from "next-intl";
 
 export const UploadCertificates = () => {
   const t = useTranslations("createBot");
-  const { certificates, addCertificates, removeCertificate, setStep } =
-    useCreateBotStore();
+  const {
+    certificates,
+    addCertificates,
+    removeCertificate,
+    setStep,
+    existingCertificates,
+    removeExistingCertificate,
+  } = useCreateBotStore();
 
   const handleDrop = (files: File[]) => {
     if (files.length > 0) {
@@ -37,6 +44,18 @@ export const UploadCertificates = () => {
 
         {/* Card */}
         <div className="w-full max-w-[845px] bg-[#FCFCFC] rounded-[40px] border-[1.6px] border-solid border-[#E5E7EB] p-8 md:p-12">
+          {/* Certificates uploaded earlier (e.g. from settings) */}
+          {existingCertificates.length > 0 && (
+            <div className="space-y-3 mb-3">
+              {existingCertificates.map((cert) => (
+                <ExistingFileCard
+                  key={cert.id}
+                  media={cert}
+                  onRemove={() => removeExistingCertificate(cert.id)}
+                />
+              ))}
+            </div>
+          )}
           <FileUpload
             onDrop={handleDrop}
             files={certificates}

@@ -200,7 +200,8 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <Link href="/pricing">
+            {/* Subscribed users go straight to the bot builder (e.g. after changing their CV) */}
+            <Link href={profile?.has_active_subscription ? "/create-bot" : "/pricing"}>
               <Button className="bg-[#101828] hover:bg-[#1E293B] px-8 h-[52px] rounded-[16px] shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98]">
                 <span className="text-[#FCFCFC] text-[16px] font-medium">
                   {t("emptyState.button")}
@@ -263,10 +264,13 @@ export default function DashboardPage() {
 
             <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
               {/* Reset/Update CV Button (white with black border) */}
-              <button className="flex-1 md:flex-none flex items-center justify-center gap-2 w-full md:w-auto h-[44px] px-5 rounded-[12px] bg-white border border-[#101828] text-[#101828] text-[14px] font-medium hover:bg-gray-50 transition-colors">
+              <Link
+                href="/settings/resume"
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 w-full md:w-auto h-[44px] px-5 rounded-[12px] bg-white border border-[#101828] text-[#101828] text-[14px] font-medium hover:bg-gray-50 transition-colors"
+              >
                 <FileEdit size={18} />
                 {t("liveCard.updateCv")}
-              </button>
+              </Link>
               
               {/* Share Button (white with black border) */}
               <button 
