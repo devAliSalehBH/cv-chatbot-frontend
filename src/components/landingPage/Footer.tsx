@@ -2,10 +2,17 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
+import { usePublicSettings } from "@/hooks/usePublicSettings";
 
 export default function Footer() {
   const t = useTranslations("footer");
   const locale = useLocale();
+  const { settings } = usePublicSettings();
+  // Admin-managed values, falling back to the static translations until they are set
+  const email = settings?.contact.email || t("contact.email");
+  const address = settings?.contact.address || t("contact.address");
+  const phone = settings?.contact.phone_number || t("contact.phone");
 
   const handleSmoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -45,18 +52,18 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-500">
               <li>
                 <a
-                  href={`mailto:${t("contact.email")}`}
+                  href={`mailto:${email}`}
                   className="hover:text-[#3B82F6] transition-colors"
                 >
-                  {t("contact.email")}
+                  {email}
                 </a>
               </li>
-              <li className="leading-relaxed">{t("contact.address")}</li>
+              <li className="leading-relaxed">{address}</li>
               <li
                 dir={`${locale == "ar" ? "ltr" : ""}`}
                 className={`${locale == "ar" ? "text-right" : ""}`}
               >
-                {t("contact.phone")}
+                {phone}
               </li>
             </ul>
           </div>
@@ -92,14 +99,14 @@ export default function Footer() {
           <div className="lg:flex lg:flex-col lg:items-start">
             <ul className="space-y-3 text-sm text-gray-500">
               <li>
-                <a href="#" className="hover:text-[#3B82F6] transition-colors">
+                <Link href="/terms" className="hover:text-[#3B82F6] transition-colors">
                   {t("legal.terms")}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#3B82F6] transition-colors">
+                <Link href="/privacy" className="hover:text-[#3B82F6] transition-colors">
                   {t("legal.privacy")}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

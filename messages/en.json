@@ -318,7 +318,8 @@
     "greeting": "Hi! I'm an AI assistant trained on this professional's resume. Feel free to ask me anything!",
     "strongMatch": "Strong match for required skills:",
     "variousSkills": "Various professional skills.",
-    "experience": "{years} years of experience in the field", "experienceIn": "{years} years of experience in {field}",
+    "experience": "{years} years of experience in the field",
+    "experienceIn": "{years} years of experience in {field}",
     "contactInfo": "Contact Info",
     "noEmail": "No email provided",
     "noPhone": "No phone provided",
@@ -441,7 +442,7 @@
       "back": "Back",
       "skip": "Skip",
       "next": "Next",
-      "submit":"Submit"
+      "submit": "Submit"
     },
     "preview": {
       "title": "Preview Your Chatbot",
@@ -488,7 +489,9 @@
         "cvLabel": "CV / Resume",
         "certLabel": "Certificate (ID: {id})",
         "retryAll": "Re-summarize All",
-        "retrying": "Re-summarizing...", "error": "Something went wrong. Please try again.", "nothingToRetry": "No files need re-processing. Refresh the page or upload your files again.",
+        "retrying": "Re-summarizing...",
+        "error": "Something went wrong. Please try again.",
+        "nothingToRetry": "No files need re-processing. Refresh the page or upload your files again.",
         "retry": "Retry"
       },
       "aiFailed": {
@@ -502,13 +505,13 @@
       }
     }
   },
-  "subscription":{
-    "title":"Subscription Required",
-    "subtitle":" A subscription is required to create your CV chatbot. Our payment page is coming soon — stay tuned!"  
-    ,"comingSoon":"Payment page coming soon",
-    "testing":"For testing purposes only:",
-    "processing":"Processing…",
-    "skip":"Skip Subscription"
+  "subscription": {
+    "title": "Subscription Required",
+    "subtitle": " A subscription is required to create your CV chatbot. Our payment page is coming soon — stay tuned!",
+    "comingSoon": "Payment page coming soon",
+    "testing": "For testing purposes only:",
+    "processing": "Processing…",
+    "skip": "Skip Subscription"
   },
   "settings": {
     "nav": {
@@ -598,5 +601,15 @@
         "fileSize": "File is too large. Maximum size is 5 MB."
       }
     }
+  },
+  "legalPage": {
+    "terms": {
+      "title": "Terms of Service"
+    },
+    "privacy": {
+      "title": "Privacy Policy"
+    },
+    "loading": "Loading...",
+    "empty": "This content has not been published yet."
   }
 }
