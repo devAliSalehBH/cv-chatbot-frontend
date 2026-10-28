@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import Header from "@/components/Header";
 import DashboardFooter from "@/components/dashboard/DashboardFooter";
 
 interface DashboardLayoutProps {
@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <>
-      <DashboardHeader />
+      <Header />
       <main className="min-h-[53svh]">{children}</main>
       <DashboardFooter />
     </>
