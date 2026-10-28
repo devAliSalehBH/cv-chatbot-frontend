@@ -5,9 +5,9 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { apiPost } from "@/lib/api";
+import { apiPost, apiGet } from "@/lib/api";
 import { useAlertStore } from "@/store/useAlertStore";
-import { setAuthToken, setUserProfile } from "@/lib/auth";
+import { setAuthToken, setUserProfile, clearAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
@@ -17,6 +17,7 @@ import {
 
 export default function VerifyOtpPage() {
   const t = useTranslations("auth.verifyOtp");
+  const tLogin = useTranslations("auth.login");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -83,21 +84,46 @@ export default function VerifyOtpPage() {
       // Show success alert
       showAlert(response.data.message, response.data.success !== false);
 
-      // Store token and user profile
-      if (response.data.token) {
-        setAuthToken(response.data.token);
+      // The backend returns the token with the verification, so the user is
+      // logged in right away: store it and load the full profile like login does.
+      const token = response.data.data?.token;
+      if (!token) {
+        throw new Error("No token returned");
       }
+      setAuthToken(token);
 
-      if (response.data.user) {
-        setUserProfile(response.data.user);
+      try {
+        const profileResponse = await apiGet("/users/profile", { locale });
+        if (!profileResponse.data.data) {
+          throw new Error("No profile data returned");
+        }
+        setUserProfile(profileResponse.data.data);
+      } catch (profileError) {
+        console.error("Failed to fetch profile:", profileError);
+        clearAuth();
+        showAlert(tLogin("errors.profile_fetch_error"), false);
+        return;
       }
 
       // Clear pending email
       localStorage.removeItem("pending_verification_email");
 
-      // Redirect to dashboard
+      // Same destination rules as login: ?redirect=, a plan picked before signing up, or the dashboard
+      const redirectParam = new URLSearchParams(window.location.search).get(
+        "redirect",
+      );
+      const hasPendingPlan = !!sessionStorage.getItem("pending_plan");
+      const safeRedirect =
+        redirectParam &&
+        redirectParam.startsWith("/") &&
+        !redirectParam.startsWith("//")
+          ? redirectParam
+          : hasPendingPlan
+            ? "/pricing"
+            : "/dashboard";
+
       setTimeout(() => {
-        window.location.href = `/${locale}/dashboard`;
+        window.location.href = `/${locale}${safeRedirect}`;
       }, 1000);
     } catch (error: any) {
       const errorMessage = error.response?.data?.message;
